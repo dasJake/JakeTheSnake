@@ -1,11 +1,16 @@
 # Battlesnake TypeScript Starter Project
 
+<<<<<<< HEAD
 An official Battlesnake template written in TypeScript. Get started at [play.battlesnake.com](https://play.battlesnake.com).
+=======
+### An official Battlesnake template written in TypeScript. Get started at [play.battlesnake.com](https://play.battlesnake.com).
+>>>>>>> 63ae0b6 (Initial commit)
 
 ![Battlesnake Logo](https://media.battlesnake.com/social/StarterSnakeGitHubRepos_TypeScript.png)
 
 This project is a great starting point for anyone wanting to program their first Battlesnake in TypeScript. It can be run locally or easily deployed to a cloud provider of your choosing. See the [Battlesnake API Docs](https://docs.battlesnake.com/api) for more detail. 
 
+<<<<<<< HEAD
 [![Run on Replit](https://repl.it/badge/github/BattlesnakeOfficial/starter-snake-typescript)](https://replit.com/@Battlesnake/starter-snake-typescript)
 
 ## Technologies Used
@@ -49,9 +54,22 @@ Command to run a local game
 ```sh
 battlesnake play -W 11 -H 11 --name 'TypeScript Starter Project' --url http://localhost:8000 -g solo --browser
 ```
+=======
+## Technologies Used
+
+This project uses [TypeScript](https://www.typescriptlang.org/), [Node.js](https://nodejs.org/en/), and [Express](https://expressjs.com/).
+
+## Run Your Battlesnake
+
+1. Click the green 'Run' button to start your Battlesnake.
+2. Use your repl.co **URL** to register your Battlesnake and play games on [play.battlesnake.com](https://play.battlesnake.com).
+>>>>>>> 63ae0b6 (Initial commit)
 
 ## Next Steps
 
 Continue with the [Battlesnake Quickstart Guide](https://docs.battlesnake.com/quickstart) to customize and improve your Battlesnake's behavior.
+<<<<<<< HEAD
 
 **Note:** To play games on [play.battlesnake.com](https://play.battlesnake.com) you'll need to deploy your Battlesnake to a live web server OR use a port forwarding tool like [ngrok](https://ngrok.com/) to access your server locally.
+=======
+>>>>>>> 63ae0b6 (Initial commit)

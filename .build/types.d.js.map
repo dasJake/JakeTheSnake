@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../types.d.ts"],
+  "sourcesContent": ["// API Types\n// https://docs.battlesnake.com/api\n\nexport interface Coord {\n  x: number;\n  y: number;\n}\n\nexport interface Battlesnake {\n  id: string;\n  name: string;\n  health: number;\n  body: Coord[];\n  head: Coord;\n  length: number;\n  latency: string;\n  shout: string;\n  customizations: Customizations;\n}\n\nexport interface Customizations {\n  color: string;\n  head: string;\n  tail: string;\n}\n\nexport interface Board {\n  height: number;\n  width: number;\n  food: Coord[];\n  hazards: Coord[];\n  snakes: Battlesnake[];\n}\n\nexport interface GameState {\n  game: Game;\n  turn: number;\n  board: Board;\n  you: Battlesnake;\n}\n\nexport interface Game {\n  id: string;\n  ruleset: Ruleset;\n  map: string;\n  source: string;\n  timeout: number;\n}\n\nexport interface Ruleset {\n  name: string;\n  version: string;\n  settings: RulesetSettings;\n}\n\nexport interface RulesetSettings {\n  foodSpawnChance: number;\n  minimumFood: number;\n  hazardDamagePerTurn: number;\n}\n\n// Response Types\n// https://docs.battlesnake.com/api\n\nexport interface InfoResponse {\n  apiversion: string;\n  author?: string;\n  color?: string;\n  head?: string;\n  tail?: string;\n  version?: string;\n}\n\nexport interface MoveResponse {\n  move: string;\n  shout?: string;\n}\n"],
+  "mappings": ";;AAAA;",
+  "names": []
+}
