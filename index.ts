@@ -11,7 +11,7 @@
 // For more info see docs.battlesnake.com
 
 import runServer from './server';
-import { GameState, InfoResponse, MoveResponse } from './types';
+import { Coord, GameState, InfoResponse, MoveResponse } from './types';
 
 // info is called when you create your Battlesnake on play.battlesnake.com
 // and controls your Battlesnake's appearance
@@ -128,13 +128,38 @@ function move(gameState: GameState): MoveResponse {
   // Choose a random move from the safe moves
   const nextMove = safeMoves[Math.floor(Math.random() * safeMoves.length)];
 
-  // TODO: Step 4 - Move towards food instead of random, to regain health and survive longer
-  // food = gameState.board.food;
+  coordAfterMove(myHead, safeMoves, gameState.board.food);
 
   console.log(`MOVE ${gameState.turn}: ${nextMove}`)
   return { move: nextMove };
 }
 
+  // TODO: Step 4 - Move towards food instead of random, to regain health and survive longer
+function coordAfterMove(myHead: Coord, safeMoves: Array<Move>, food: Array<Coord>): Coord {
+  const safeCoords = safeMoves.map((move) =>
+  {
+    const coord: Coord = {x: myHead.x, y: myHead.y};
+    
+    switch (move) {
+      case "up":
+        coord.y++;
+        break;
+      case "down":
+        coord.y--;
+        break;
+      case "left":
+        coord.x--;
+        break;
+      case "right":
+        coord.x++;
+        break;
+    }
+    return coord;
+  });
+  const availableFood = food.find((currentFood) => safeCoords.find((currentCoord) => currentCoord.x == currentFood.x && currentCoord.y == currentFood.y));
+  
+console.log({safeCoords, availableFood});
+}
 runServer({
   info: info,
   start: start,
