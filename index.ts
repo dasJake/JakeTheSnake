@@ -89,9 +89,9 @@ function move(gameState: GameState): MoveResponse {
   }
 
   // TODO: Step 2 - Prevent your Battlesnake from colliding with itself
-  myBody = gameState.you.body;
+  myBody = gameState.you.body.slice(0, -1);
 
-  gameState.board.snakes.forEach((snake) => snake.body.forEach((cell) => myBody.push(cell)));
+  gameState.board.snakes.forEach((snake) => snake.body.slice(0, -1).forEach((cell) => myBody.push(cell)));
 
   // illegal up
   if (myBody.find((cell) => cell.x == myHead.x && cell.y == myHead.y + 1)) {
