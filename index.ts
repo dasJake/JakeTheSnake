@@ -88,7 +88,9 @@ function move(gameState: GameState): MoveResponse {
     isMoveSafe.up = false;
   }
 
-  // TODO: Step 2 - Prevent your Battlesnake from colliding with itself
+  // TODO: Step 2 - Prevent your Battlesnake from colliding with itself and other snakes
+
+  // slice last element/tail because it will be possible to move where the tail is now
   myBody = gameState.you.body.slice(0, -1);
 
   gameState.board.snakes.forEach((snake) => snake.body.slice(0, -1).forEach((cell) => myBody.push(cell)));
