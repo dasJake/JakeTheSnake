@@ -21,10 +21,10 @@ function info(): InfoResponse {
 
   return {
     apiversion: "1",
-    author: "",       // TODO: Your Battlesnake Username
-    color: "#888888", // TODO: Choose color
-    head: "default",  // TODO: Choose head
-    tail: "default",  // TODO: Choose tail
+    author: "JakeTheSnake",       // TODO: Your Battlesnake Username
+    color: "#bd324f", // TODO: Choose color
+    head: "tiger-king",  // TODO: Choose head
+    tail: "tiger-tail",  // TODO: Choose tail
   };
 }
 
