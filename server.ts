@@ -30,11 +30,7 @@ export default function runServer(handlers: BattlesnakeHandlers) {
   });
 
   app.use(function(req: Request, res: Response, next: NextFunction) {
-<<<<<<< HEAD
     res.set("Server", "battlesnake/github/starter-snake-typescript");
-=======
-    res.set("Server", "battlesnake/replit/starter-snake-typescript");
->>>>>>> 63ae0b6 (Initial commit)
     next();
   });
 
