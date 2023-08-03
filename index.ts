@@ -12,6 +12,7 @@
 
 import runServer from './server';
 import { Coord, GameState, InfoResponse, MoveResponse } from './types';
+import { SafeCoord, SafeCoords } from './safe-coord';
 
 // info is called when you create your Battlesnake on play.battlesnake.com
 // and controls your Battlesnake's appearance
@@ -117,6 +118,7 @@ function move(gameState: GameState): MoveResponse {
   // TODO: Step 3 - Prevent your Battlesnake from colliding with other Battlesnakes
   // opponents = gameState.board.snakes;
 
+
   // Are there any safe moves left?
   const safeMoves = Object.keys(isMoveSafe).filter(key => isMoveSafe[key]);
   console.log({safeMoves, myHead, myBody});
@@ -124,18 +126,36 @@ function move(gameState: GameState): MoveResponse {
     console.log(`MOVE ${gameState.turn}: No safe moves detected! Moving down`);
     return { move: "down" };
   }
+  
+  // determine safe coordinates
+  const snakeHeads: Coord[] = gameState.board.snakes.map((snake) => snake.head);
+  console.log({snakeHeads});
+  const safeCoords = determineSafeCoords(safeMoves, myHead, snakeHeads);
+  console.log(JSON.stringify({safeCoords}, null, 2));
+  safeCoords.forEach((piece) => {console.log(piece.coord);});
 
   // Choose a random move from the safe moves
   const nextMove = safeMoves[Math.floor(Math.random() * safeMoves.length)];
 
-  coordAfterMove(myHead, safeMoves, gameState.board.food);
+ // coordAfterMove(myHead, safeMoves, gameState.board.food);
 
+  
   console.log(`MOVE ${gameState.turn}: ${nextMove}`)
   return { move: nextMove };
 }
 
+function determineSafeCoords(safeMoves: Array<Move>, myHead: Coord, snakeHeads: Array<Coord>): SafeCoords
+{
+  const safeCoords: SafeCoords = [];
+  for (const currentMove of safeMoves)
+    {
+    const currentSafeCoord = new SafeCoord(currentMove, myHead, snakeHeads);
+    safeCoords.push(currentSafeCoord);
+    }
+  return safeCoords;
+}
   // TODO: Step 4 - Move towards food instead of random, to regain health and survive longer
-function coordAfterMove(myHead: Coord, safeMoves: Array<Move>, food: Array<Coord>): Coord {
+/*function coordAfterMove(myHead: Coord, safeMoves: Array<Move>, food: Array<Coord>): Coord {
   const safeCoords = safeMoves.map((move) =>
   {
     const coord: Coord = {x: myHead.x, y: myHead.y};
@@ -159,7 +179,7 @@ function coordAfterMove(myHead: Coord, safeMoves: Array<Move>, food: Array<Coord
   const availableFood = food.find((currentFood) => safeCoords.find((currentCoord) => currentCoord.x == currentFood.x && currentCoord.y == currentFood.y));
   
 console.log({safeCoords, availableFood});
-}
+}*/
 runServer({
   info: info,
   start: start,
