@@ -39,14 +39,16 @@ export class SafeCoord
   
   checkForHead (snakeHeads: Array<Coord>): boolean
   {
-   for (const currentCoord of snakeHeads)
-     {
-       if (currentCoord.x === this.coord.x && currentCoord.y === this.coord.y)
-       {
-         return true;
-       }
-     }
-    return false;
+    return Boolean(
+      snakeHeads.find((currentCoord: Coord) =>
+       coordEq(this.coord, currentCoord))); 
+  }
+  
+  checkForFood (foods: Array<Coord>): boolean
+  {
+    return Boolean(
+      foods.find((currentCoord: Coord) =>
+       coordEq(this.coord, currentCoord))); 
   }
 }
 
