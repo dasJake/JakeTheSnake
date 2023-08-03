@@ -6,6 +6,11 @@ export interface Coord {
   y: number;
 }
 
+export function coordEq(a: Coord, b: Coord): boolean
+{
+  return a.x === b.x && a.y === b.y;
+}
+
 export interface Battlesnake {
   id: string;
   name: string;

@@ -11,7 +11,7 @@
 // For more info see docs.battlesnake.com
 
 import runServer from './server';
-import { Coord, GameState, InfoResponse, MoveResponse } from './types';
+import { Coord, GameState, InfoResponse, MoveResponse } from './types.d';
 import { SafeCoord, SafeCoords } from './safe-coord';
 
 // info is called when you create your Battlesnake on play.battlesnake.com
@@ -130,10 +130,19 @@ function move(gameState: GameState): MoveResponse {
   // determine safe coordinates
   const snakeHeads: Coord[] = gameState.board.snakes.map((snake) => snake.head);
   console.log({snakeHeads});
-  const safeCoords = determineSafeCoords(safeMoves, myHead, snakeHeads);
+  const foods: Coord[] = gameState.board.food;
+  const safeCoords = determineSafeCoords(safeMoves, myHead, snakeHeads, foods);
   console.log(JSON.stringify({safeCoords}, null, 2));
   safeCoords.forEach((piece) => {console.log(piece.coord);});
 
+  // Find safeCoord with food
+  const coordWithFood: SafeCoord | undefined = safeCoords.find((c) => c.hasFood);
+  if (coordWithFood)
+  {
+    console.log(`MOVE ${gameState.turn}: ${coordWithFood.move} - FOUND FOOD`)
+    return { move: coordWithFood.move }
+  }
+  
   // Choose a random move from the safe moves
   const nextMove = safeMoves[Math.floor(Math.random() * safeMoves.length)];
 
@@ -144,12 +153,12 @@ function move(gameState: GameState): MoveResponse {
   return { move: nextMove };
 }
 
-function determineSafeCoords(safeMoves: Array<Move>, myHead: Coord, snakeHeads: Array<Coord>): SafeCoords
+function determineSafeCoords(safeMoves: Array<Move>, myHead: Coord, snakeHeads: Array<Coord>, foods: Array<Coord>): SafeCoords
 {
   const safeCoords: SafeCoords = [];
   for (const currentMove of safeMoves)
     {
-    const currentSafeCoord = new SafeCoord(currentMove, myHead, snakeHeads);
+    const currentSafeCoord = new SafeCoord(currentMove, myHead, snakeHeads, foods);
     safeCoords.push(currentSafeCoord);
     }
   return safeCoords;

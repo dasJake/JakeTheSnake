@@ -1,4 +1,4 @@
-import { Coord, Move } from "./types"
+import { Coord, coordEq, Move } from './types.d';
 
 export class SafeCoord
 {
@@ -8,12 +8,13 @@ export class SafeCoord
   isSomeonesHead: boolean;   //useless because head will be somewhere else in the next move; instead anticipate if a head could land on this coord in the next move.
   hasFood: boolean;
 
-  constructor (currentMove: Move, myHead: Coord, snakeHeads: Array<Coord>)
+  constructor (currentMove: Move, myHead: Coord, snakeHeads: Array<Coord>, foods: Array<Coords>)
   {
     this.move = currentMove;
     this.coord = this.setCoord(this.move, myHead);
+    this.isSomeonesHead = this.checkForHead(snakeHeads);
+    this.hasFood = this.checkForFood(foods);
     this.rating = 100;
-    this.isSomeonesHead = this.checkForHead(snakeHeads)
   }
 
   setCoord (move: Move, myHead: Coord): Coord
