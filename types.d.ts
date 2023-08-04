@@ -75,7 +75,7 @@ export interface InfoResponse {
   version?: string;
 }
 
-type Move = "left" | "right" | "up" | "down";
+export type Move = "left" | "right" | "up" | "down";
 
 export interface MoveResponse {
   move: Move;

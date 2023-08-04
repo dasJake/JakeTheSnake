@@ -11,7 +11,7 @@ export class SafeCoord {
     currentMove: Move,
     myHead: Coord,
     snakeHeads: Array<Coord>,
-    foods: Array<Coords>,
+    foods: Array<Coord>,
   ) {
     this.move = currentMove;
     this.coord = this.setCoord(this.move, myHead);
@@ -54,6 +54,4 @@ export class SafeCoord {
   }
 }
 
-export interface SafeCoords {
-  safeCoords: SafeCoord[];
-}
+export type SafeCoords = SafeCoord[];

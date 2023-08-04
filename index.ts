@@ -11,7 +11,7 @@
 // For more info see docs.battlesnake.com
 
 import runServer from "./server";
-import { Coord, GameState, InfoResponse, MoveResponse } from "./types.d";
+import { Coord, GameState, InfoResponse, Move, MoveResponse } from "./types.d";
 import { SafeCoord, SafeCoords } from "./safe-coord";
 
 // info is called when you create your Battlesnake on play.battlesnake.com
@@ -43,7 +43,7 @@ function end(gameState: GameState): void {
 // Valid moves are "up", "down", "left", or "right"
 // See https://docs.battlesnake.com/api/example-move for available data
 function move(gameState: GameState): MoveResponse {
-  let isMoveSafe: { [key: string]: boolean } = {
+  let isMoveSafe: { [key in Move]: boolean } = {
     up: true,
     down: true,
     left: true,
@@ -88,7 +88,7 @@ function move(gameState: GameState): MoveResponse {
   // TODO: Step 2 - Prevent your Battlesnake from colliding with itself and other snakes
 
   // slice last element/tail because it will be possible to move where the tail is now
-  myBody = gameState.you.body.slice(0, -1);
+  const myBody = gameState.you.body.slice(0, -1);
 
   gameState.board.snakes.forEach((snake) =>
     snake.body.slice(0, -1).forEach((cell) => myBody.push(cell)),
@@ -117,7 +117,9 @@ function move(gameState: GameState): MoveResponse {
   // opponents = gameState.board.snakes;
 
   // Are there any safe moves left?
-  const safeMoves = Object.keys(isMoveSafe).filter((key) => isMoveSafe[key]);
+  const safeMoves = Object.keys(isMoveSafe).filter(
+    (key) => isMoveSafe[key as Move],
+  ) as Move[];
   console.log({ safeMoves, myHead, myBody });
   if (safeMoves.length == 0) {
     console.log(`MOVE ${gameState.turn}: No safe moves detected! Moving down`);
