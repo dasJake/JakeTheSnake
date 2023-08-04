@@ -4,10 +4,11 @@
   "author": "BattlesnakeOfficial",
   "description": "An official Battlesnake template written in TypeScript. Get started at play.battlesnake.com.",
   "license": "MIT",
+  "type": "module",
   "scripts": {
     "build": "tsc",
     "prestart": "npm run build",
-    "start": "node ./build/index.js",
+    "start": "node ./.build/index.js",
     "format": "npx prettier --write \"**/*.ts\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
