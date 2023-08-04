@@ -1,4 +1,5 @@
-import { Coord, coordEq, Move } from "./types.js";
+import { Board, Coord, coordEq, Move } from "./types.js";
+import { floodFill } from "./index.js";
 
 export class SafeCoord {
   move: Move;
@@ -6,18 +7,21 @@ export class SafeCoord {
   rating: number;
   isSomeonesHead: boolean; //useless because head will be somewhere else in the next move; instead anticipate if a head could land on this coord in the next move.
   hasFood: boolean;
+  adjacentSafeCoords: number;
 
   constructor(
     currentMove: Move,
     myHead: Coord,
     snakeHeads: Array<Coord>,
     foods: Array<Coord>,
+    board: Board,
   ) {
     this.move = currentMove;
     this.coord = this.setCoord(this.move, myHead);
     this.isSomeonesHead = this.checkForHead(snakeHeads);
     this.hasFood = this.checkForFood(foods);
     this.rating = 100;
+    this.adjacentSafeCoords = floodFill([this.coord], 0, board).length;
   }
 
   setCoord(move: Move, myHead: Coord): Coord {

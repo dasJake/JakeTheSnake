@@ -11,7 +11,15 @@
 // For more info see docs.battlesnake.com
 
 import runServer from "./server.js";
-import { Coord, GameState, InfoResponse, Move, MoveResponse } from "./types.js";
+import {
+  Board,
+  Coord,
+  coordEq,
+  GameState,
+  InfoResponse,
+  Move,
+  MoveResponse,
+} from "./types.js";
 import { SafeCoord, SafeCoords } from "./safe-coord.js";
 
 // info is called when you create your Battlesnake on play.battlesnake.com
@@ -128,9 +136,13 @@ function move(gameState: GameState): MoveResponse {
 
   // determine safe coordinates
   const snakeHeads: Coord[] = gameState.board.snakes.map((snake) => snake.head);
+  
   console.log({ snakeHeads });
+  
   const foods: Coord[] = gameState.board.food;
-  const safeCoords = determineSafeCoords(safeMoves, myHead, snakeHeads, foods);
+  
+  const safeCoords = determineSafeCoords(safeMoves, myHead, snakeHeads, foods, gameState.board);
+  
   console.log(JSON.stringify({ safeCoords }, null, 2));
   safeCoords.forEach((piece) => {
     console.log(piece.coord);
@@ -159,6 +171,7 @@ function determineSafeCoords(
   myHead: Coord,
   snakeHeads: Array<Coord>,
   foods: Array<Coord>,
+  board: Board,
 ): SafeCoords {
   const safeCoords: SafeCoords = [];
   for (const currentMove of safeMoves) {
@@ -167,10 +180,68 @@ function determineSafeCoords(
       myHead,
       snakeHeads,
       foods,
+      board,
     );
     safeCoords.push(currentSafeCoord);
   }
   return safeCoords;
+}
+
+export function floodFill(
+  area: Array<Coord>,
+  index: number,
+  board: Board,
+): Array<Coord> {
+  if (index >= area.length) {
+    return area;
+  }
+  const currentCoord: Coord = area[index];
+  const currentNeighbors: Array<Coord> = [
+    { ...currentCoord, x: currentCoord.x - 1 },
+    { ...currentCoord, x: currentCoord.x + 1 },
+    { ...currentCoord, x: currentCoord.y - 1 },
+    { ...currentCoord, x: currentCoord.y + 1 },
+  ];
+  const safeNeighborsNotInArea: Array<Coord> = currentNeighbors.filter(
+    (coord) =>
+      isCoordSafe(coord, board) &&
+      !area.find((areaCoord) => coordEq(coord, areaCoord)),
+  );
+
+  return floodFill([...area, ...safeNeighborsNotInArea], index ++, board);
+}
+
+function isCoordSafe(coord: Coord, board: Board): boolean {
+  return isCoordInBounds(coord, board) && isCoordFree(coord, board);
+}
+
+function isCoordInBounds(coord: Coord, board: Board): boolean {
+  const boardWidth = board.width;
+  const boardHeight = board.height;
+
+  if (coord.x < 0) {
+    return false;
+  }
+  if (coord.x < board.width + 1) {
+    return false;
+  }
+  if (coord.y < 0) {
+    return false;
+  }
+  if (coord.y < board.width + 1) {
+    return false;
+  }
+  return true;
+}
+
+function isCoordFree(coord: Coord, board: Board): boolean {
+  if (board.hazards.find((hazardCoord) => coordEq(coord, hazardCoord))) {
+    return false
+  }
+  if (board.snakes.some((snake) => snake.body.find((snakeCoord) => coordEq(coord, snakeCoord)))) {
+    return false
+  }
+  return true;
 }
 // TODO: Step 4 - Move towards food instead of random, to regain health and survive longer
 /*function coordAfterMove(myHead: Coord, safeMoves: Array<Move>, food: Array<Coord>): Coord {
