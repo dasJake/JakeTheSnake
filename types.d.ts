@@ -6,8 +6,7 @@ export interface Coord {
   y: number;
 }
 
-export function coordEq(a: Coord, b: Coord): boolean
-{
+export function coordEq(a: Coord, b: Coord): boolean {
   return a.x === b.x && a.y === b.y;
 }
 
@@ -77,7 +76,6 @@ export interface InfoResponse {
 }
 
 type Move = "left" | "right" | "up" | "down";
-
 
 export interface MoveResponse {
   move: Move;
