@@ -11,7 +11,7 @@
 // For more info see docs.battlesnake.com
 
 import runServer from "./server";
-import { Coord, GameState, InfoResponse, Move, MoveResponse } from "./types.d";
+import { Coord, GameState, InfoResponse, Move, MoveResponse } from "./types";
 import { SafeCoord, SafeCoords } from "./safe-coord";
 
 // info is called when you create your Battlesnake on play.battlesnake.com

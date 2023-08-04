@@ -1,4 +1,4 @@
-import { Coord, coordEq, Move } from "./types.d";
+import { Coord, coordEq, Move } from "./types";
 
 export class SafeCoord {
   move: Move;
