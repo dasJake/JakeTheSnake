@@ -203,8 +203,8 @@ export function floodFill(
   const currentNeighbors: Array<Coord> = [
     { ...currentCoord, x: currentCoord.x - 1 },
     { ...currentCoord, x: currentCoord.x + 1 },
-    { ...currentCoord, x: currentCoord.y - 1 },
-    { ...currentCoord, x: currentCoord.y + 1 },
+    { ...currentCoord, y: currentCoord.y - 1 },
+    { ...currentCoord, y: currentCoord.y + 1 },
   ];
   const safeNeighborsNotInArea: Array<Coord> = currentNeighbors.filter(
     (coord) =>
@@ -212,7 +212,7 @@ export function floodFill(
       !area.find((areaCoord) => coordEq(coord, areaCoord)),
   );
 
-  return floodFill([...area, ...safeNeighborsNotInArea], index ++, board);
+  return floodFill([...area, ...safeNeighborsNotInArea], index + 1, board);
 }
 
 function isCoordSafe(coord: Coord, board: Board): boolean {
@@ -226,13 +226,13 @@ function isCoordInBounds(coord: Coord, board: Board): boolean {
   if (coord.x < 0) {
     return false;
   }
-  if (coord.x < board.width + 1) {
+  if (coord.x >= board.width) {
     return false;
   }
   if (coord.y < 0) {
     return false;
   }
-  if (coord.y < board.width + 1) {
+  if (coord.y >= board.width) {
     return false;
   }
   return true;
