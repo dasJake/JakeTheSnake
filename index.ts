@@ -130,7 +130,6 @@ function move(gameState: GameState): MoveResponse {
   const safeMoves = Object.keys(isMoveSafe).filter(
     (key) => isMoveSafe[key as Move],
   ) as Move[];
-  debug({ safeMoves, myHead, myBody });
   if (safeMoves.length == 0) {
     debug(`MOVE ${gameState.turn}: No safe moves detected! Moving down`);
     return { move: "down" };
@@ -138,8 +137,6 @@ function move(gameState: GameState): MoveResponse {
 
   // determine safe coordinates
   const snakeHeads: Coord[] = gameState.board.snakes.map((snake) => snake.head);
-
-  debug({ snakeHeads });
 
   const foods: Coord[] = gameState.board.food;
 
@@ -151,21 +148,6 @@ function move(gameState: GameState): MoveResponse {
     gameState.board,
   );
 
-  debug(JSON.stringify({ safeCoords }, null, 2));
-  safeCoords.forEach((piece) => {
-    debug(piece.coord);
-  });
-
-  // Find safeCoord with food
-  /*
-  const coordWithFood: SafeCoord | undefined = safeCoords.find(
-    (c) => c.hasFood,
-  );
-  if (coordWithFood) {
-    debug(`MOVE ${gameState.turn}: ${coordWithFood.move} - FOUND FOOD`);
-    return { move: coordWithFood.move }; 
-  }
-  */
   // Choose move according to rating
   const allAreasEqual = safeCoords.reduce((accumulator, currentValue) => {
     if (currentValue.rating !== accumulator.acc.rating){
@@ -219,10 +201,6 @@ export function floodFill(
   index: number,
   board: Board,
 ): Array<Coord> {
-  debug({area, index, board});
-  
-  //debug(JSON.stringify({  }, null, 2));
-  
   if (index >= area.length) {
     return area;
   }
