@@ -21,12 +21,14 @@ import {
   MoveResponse,
 } from "./types.js";
 import { SafeCoord, SafeCoords } from "./safe-coord.js";
+import * as fs from "fs";
+import * as util from "util";
 
 // info is called when you create your Battlesnake on play.battlesnake.com
 // and controls your Battlesnake's appearance
 // TIP: If you open your Battlesnake URL in a browser you should see this data
 function info(): InfoResponse {
-  console.log("INFO");
+  debug("INFO");
 
   return {
     apiversion: "1",
@@ -39,12 +41,12 @@ function info(): InfoResponse {
 
 // start is called when your Battlesnake begins a game
 function start(gameState: GameState): void {
-  console.log("GAME START");
+  debug("GAME START");
 }
 
 // end is called when your Battlesnake finishes a game
 function end(gameState: GameState): void {
-  console.log("GAME OVER\n");
+  debug("GAME OVER\n");
 }
 
 // move is called on every turn and returns your next move
@@ -128,24 +130,24 @@ function move(gameState: GameState): MoveResponse {
   const safeMoves = Object.keys(isMoveSafe).filter(
     (key) => isMoveSafe[key as Move],
   ) as Move[];
-  console.log({ safeMoves, myHead, myBody });
+  debug({ safeMoves, myHead, myBody });
   if (safeMoves.length == 0) {
-    console.log(`MOVE ${gameState.turn}: No safe moves detected! Moving down`);
+    debug(`MOVE ${gameState.turn}: No safe moves detected! Moving down`);
     return { move: "down" };
   }
 
   // determine safe coordinates
   const snakeHeads: Coord[] = gameState.board.snakes.map((snake) => snake.head);
   
-  console.log({ snakeHeads });
+  debug({ snakeHeads });
   
   const foods: Coord[] = gameState.board.food;
   
   const safeCoords = determineSafeCoords(safeMoves, myHead, snakeHeads, foods, gameState.board);
   
-  console.log(JSON.stringify({ safeCoords }, null, 2));
+  debug(JSON.stringify({ safeCoords }, null, 2));
   safeCoords.forEach((piece) => {
-    console.log(piece.coord);
+    debug(piece.coord);
   });
 
   // Find safeCoord with food
@@ -153,16 +155,14 @@ function move(gameState: GameState): MoveResponse {
     (c) => c.hasFood,
   );
   if (coordWithFood) {
-    console.log(`MOVE ${gameState.turn}: ${coordWithFood.move} - FOUND FOOD`);
+    debug(`MOVE ${gameState.turn}: ${coordWithFood.move} - FOUND FOOD`);
     return { move: coordWithFood.move };
   }
 
   // Choose a random move from the safe moves
   const nextMove = safeMoves[Math.floor(Math.random() * safeMoves.length)];
 
-  // coordAfterMove(myHead, safeMoves, gameState.board.food);
-
-  console.log(`MOVE ${gameState.turn}: ${nextMove}`);
+  debug(`MOVE ${gameState.turn}: ${nextMove}`);
   return { move: nextMove };
 }
 
@@ -192,6 +192,10 @@ export function floodFill(
   index: number,
   board: Board,
 ): Array<Coord> {
+  debug({area, index, board});
+  
+  //debug(JSON.stringify({  }, null, 2));
+  
   if (index >= area.length) {
     return area;
   }
@@ -243,32 +247,11 @@ function isCoordFree(coord: Coord, board: Board): boolean {
   }
   return true;
 }
-// TODO: Step 4 - Move towards food instead of random, to regain health and survive longer
-/*function coordAfterMove(myHead: Coord, safeMoves: Array<Move>, food: Array<Coord>): Coord {
-  const safeCoords = safeMoves.map((move) =>
-  {
-    const coord: Coord = {x: myHead.x, y: myHead.y};
-    
-    switch (move) {
-      case "up":
-        coord.y++;
-        break;
-      case "down":
-        coord.y--;
-        break;
-      case "left":
-        coord.x--;
-        break;
-      case "right":
-        coord.x++;
-        break;
-    }
-    return coord;
-  });
-  const availableFood = food.find((currentFood) => safeCoords.find((currentCoord) => currentCoord.x == currentFood.x && currentCoord.y == currentFood.y));
-  
-console.log({safeCoords, availableFood});
-}*/
+
+function debug(message: any): void {
+  fs.writeFileSync("debug.log", util.inspect(message) + "\n", { flag: "a+" });
+}
+
 runServer({
   info: info,
   start: start,
