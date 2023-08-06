@@ -23,12 +23,16 @@ import {
 import { SafeCoord, SafeCoords } from "./safe-coord.js";
 import * as fs from "fs";
 import * as util from "util";
+const gameLog = "game.log";
+const debugLog = "debug.log";
+let gameLogStream = fs.createWriteStream(gameLog);
+let debugLogStream = fs.createWriteStream(debugLog);
 
 // info is called when you create your Battlesnake on play.battlesnake.com
 // and controls your Battlesnake's appearance
 // TIP: If you open your Battlesnake URL in a browser you should see this data
 function info(): InfoResponse {
-  debug("INFO");
+  writeToLog(gameLogStream, "INFO");
 
   return {
     apiversion: "1",
@@ -41,12 +45,15 @@ function info(): InfoResponse {
 
 // start is called when your Battlesnake begins a game
 function start(gameState: GameState): void {
-  debug("GAME START");
+  gameLogStream.end();
+  fs.truncateSync(gameLog, 0);
+  gameLogStream = fs.createWriteStream(gameLog);
+  writeToLog(gameLogStream, "GAME START");
 }
 
 // end is called when your Battlesnake finishes a game
 function end(gameState: GameState): void {
-  debug("GAME OVER\n");
+  writeToLog(gameLogStream, "GAME OVER\n");
 }
 
 // move is called on every turn and returns your next move
@@ -131,7 +138,7 @@ function move(gameState: GameState): MoveResponse {
     (key) => isMoveSafe[key as Move],
   ) as Move[];
   if (safeMoves.length == 0) {
-    debug(`MOVE ${gameState.turn}: No safe moves detected! Moving down`);
+    writeToLog(gameLogStream, `MOVE ${gameState.turn}: No safe moves detected! Moving down`);
     return { move: "down" };
   }
 
@@ -164,14 +171,14 @@ function move(gameState: GameState): MoveResponse {
     accumulator.rating > currentValue.rating ? accumulator : currentValue,
   ).move;
 
-    debug(`MOVE ${gameState.turn}: Multiple areas detected, moving to largest`);
+    writeToLog(gameLogStream, `MOVE ${gameState.turn}: Multiple areas detected, moving to largest`);
   return {move: nextMove};
   }
 
   // Choose a random move from the safe moves
   const nextMove = safeMoves[Math.floor(Math.random() * safeMoves.length)];
 
-  debug(`MOVE ${gameState.turn}: ${nextMove}`);
+  writeToLog(gameLogStream, `MOVE ${gameState.turn}: ${nextMove}`);
   return { move: nextMove };
 }
 
@@ -257,8 +264,8 @@ function isCoordFree(coord: Coord, board: Board): boolean {
   return true;
 }
 
-function debug(message: any): void {
-  fs.writeFileSync("debug.log", util.inspect(message) + "\n", { flag: "a+" });
+function writeToLog(logStream: any, message: any): void {
+  logStream.write(`${message}\n`);
 }
 
 runServer({
