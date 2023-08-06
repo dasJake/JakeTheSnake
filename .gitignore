@@ -1,5 +1,6 @@
 .DS_Store
 
+debug.log
 build
 node_modules
 .build/
