@@ -20,8 +20,8 @@ export class SafeCoord {
     this.coord = this.setCoord(this.move, myHead);
     this.isSomeonesHead = this.checkForHead(snakeHeads);
     this.hasFood = this.checkForFood(foods);
-    this.rating = 100;
     this.adjacentSafeCoords = floodFill([this.coord], 0, board).length;
+    this.rating = this.setRating();
   }
 
   setCoord(move: Move, myHead: Coord): Coord {
@@ -55,6 +55,14 @@ export class SafeCoord {
     return Boolean(
       foods.find((currentCoord: Coord) => coordEq(this.coord, currentCoord)),
     );
+  }
+
+  setRating(): number {
+    let newRating: number = this.adjacentSafeCoords + 1;
+    if (this.hasFood) {
+      newRating += 25;
+    }
+    return newRating;
   }
 }
 

@@ -138,25 +138,52 @@ function move(gameState: GameState): MoveResponse {
 
   // determine safe coordinates
   const snakeHeads: Coord[] = gameState.board.snakes.map((snake) => snake.head);
-  
+
   debug({ snakeHeads });
-  
+
   const foods: Coord[] = gameState.board.food;
-  
-  const safeCoords = determineSafeCoords(safeMoves, myHead, snakeHeads, foods, gameState.board);
-  
+
+  const safeCoords = determineSafeCoords(
+    safeMoves,
+    myHead,
+    snakeHeads,
+    foods,
+    gameState.board,
+  );
+
   debug(JSON.stringify({ safeCoords }, null, 2));
   safeCoords.forEach((piece) => {
     debug(piece.coord);
   });
 
   // Find safeCoord with food
+  /*
   const coordWithFood: SafeCoord | undefined = safeCoords.find(
     (c) => c.hasFood,
   );
   if (coordWithFood) {
     debug(`MOVE ${gameState.turn}: ${coordWithFood.move} - FOUND FOOD`);
-    return { move: coordWithFood.move };
+    return { move: coordWithFood.move }; 
+  }
+  */
+  // Choose move according to rating
+  const allAreasEqual = safeCoords.reduce((accumulator, currentValue) => {
+    if (currentValue.rating !== accumulator.acc.rating){
+      return {...accumulator, result: false}
+    }
+    return accumulator
+  }, {
+    result: true,
+    acc: safeCoords[0],
+  }).result;
+
+  if (!allAreasEqual){
+  const nextMove: Move = safeCoords.reduce((accumulator, currentValue) =>
+    accumulator.rating > currentValue.rating ? accumulator : currentValue,
+  ).move;
+
+    debug(`MOVE ${gameState.turn}: Multiple areas detected, moving to largest`);
+  return {move: nextMove};
   }
 
   // Choose a random move from the safe moves
