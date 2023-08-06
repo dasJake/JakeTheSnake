@@ -256,7 +256,7 @@ function isCoordFree(coord: Coord, board: Board): boolean {
   }
   if (
     board.snakes.some((snake) =>
-      snake.body.find((snakeCoord) => coordEq(coord, snakeCoord)),
+      snake.body.slice(0, -1).find((snakeCoord) => coordEq(coord, snakeCoord)),
     )
   ) {
     return false;
