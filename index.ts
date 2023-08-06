@@ -267,10 +267,14 @@ function isCoordInBounds(coord: Coord, board: Board): boolean {
 
 function isCoordFree(coord: Coord, board: Board): boolean {
   if (board.hazards.find((hazardCoord) => coordEq(coord, hazardCoord))) {
-    return false
+    return false;
   }
-  if (board.snakes.some((snake) => snake.body.find((snakeCoord) => coordEq(coord, snakeCoord)))) {
-    return false
+  if (
+    board.snakes.some((snake) =>
+      snake.body.find((snakeCoord) => coordEq(coord, snakeCoord)),
+    )
+  ) {
+    return false;
   }
   return true;
 }
