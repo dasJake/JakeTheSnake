@@ -153,6 +153,7 @@ function move(gameState: GameState): MoveResponse {
     snakeHeads,
     foods,
     gameState.board,
+    gameState,
   );
 
   // Choose move according to rating
@@ -188,6 +189,7 @@ function determineSafeCoords(
   snakeHeads: Array<Coord>,
   foods: Array<Coord>,
   board: Board,
+  gameState: GameState
 ): SafeCoords {
   const safeCoords: SafeCoords = [];
   for (const currentMove of safeMoves) {
@@ -197,6 +199,7 @@ function determineSafeCoords(
       snakeHeads,
       foods,
       board,
+      gameState,
     );
     safeCoords.push(currentSafeCoord);
   }
@@ -207,6 +210,7 @@ export function floodFill(
   area: Array<Coord>,
   index: number,
   board: Board,
+  gameState: GameState,
 ): Array<Coord> {
   if (index >= area.length) {
     return area;
@@ -224,7 +228,8 @@ export function floodFill(
       !area.find((areaCoord) => coordEq(coord, areaCoord)),
   );
 
-  return floodFill([...area, ...safeNeighborsNotInArea], index + 1, board);
+  writeToLog(debugLogStream, `MOVE ${gameState.turn}| index: ${[index]} -- ${[...area, ...safeNeighborsNotInArea].length}`);
+  return floodFill([...area, ...safeNeighborsNotInArea], index + 1, board, gameState);
 }
 
 function isCoordSafe(coord: Coord, board: Board): boolean {

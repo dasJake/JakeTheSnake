@@ -1,4 +1,4 @@
-import { Board, Coord, coordEq, Move } from "./types.js";
+import { GameState, Board, Coord, coordEq, Move } from "./types.js";
 import { floodFill } from "./index.js";
 
 export class SafeCoord {
@@ -15,12 +15,13 @@ export class SafeCoord {
     snakeHeads: Array<Coord>,
     foods: Array<Coord>,
     board: Board,
+    gameState: GameState,
   ) {
     this.move = currentMove;
     this.coord = this.setCoord(this.move, myHead);
     this.isSomeonesHead = this.checkForHead(snakeHeads);
     this.hasFood = this.checkForFood(foods);
-    this.adjacentSafeCoords = floodFill([this.coord], 0, board).length;
+    this.adjacentSafeCoords = floodFill([this.coord], 0, board, gameState).length;
     this.rating = this.setRating();
   }
 
