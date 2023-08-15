@@ -75,6 +75,46 @@ export class SafeCoord {
     }
     return newRating;
   }
+
+  determineKillChance(gameState: GameState, currentCoord: Coord): any {
+    const firstGradeNeighbors: Coord[] = getNeighbors(currentCoord);
+    /*UNFINISHED: const secondGradeNeighbors: Coord[] = getNeighbors(currentCoord).map(
+      (neighbor) => 
+      getNeighbors(neighbor)).reduce((accumulator, currentValue) => { 
+        if (accumulator.find((current) => 
+        coordEq(current, neighbor)){return accumulator}
+        return [...currentNeighbor, ...accumulator])), [])));
+
+    //UNFINISHED const secondGradeNeighbors: Coord[] = getNeighbors(currentCoord).map(
+      (neighbor) => 
+      getNeighbors(neighbor)).reduce((accumulator, currentValue) => { 
+        return [...accumulator, ...currentValue];
+      }, []).filter((neighbor) =>
+        !coordEq(neighbor, currentCoord))
+
+    const secondGradeNeighbors: Coord[] = firstGradeNeighbors.flatMap(
+      (neighbor) => getNeighbors(neighbor));
+
+    const secondGradeNeighbors: Coord[] = Array.from(
+      new Set(
+        getNeighbors(currentCoord)
+          .flatMap((neighbor) => getNeighbors(neighbor))
+          .filter((neighbor) => !coordEq(neighbor, currentCoord))
+      )
+    );
+*/
+    let secondGradeNeighbors = firstGradeNeighbors.
+      flatMap((neighbor) => 
+      getNeighbors(neighbor));
+
+    writeToLog(debugLogStream, `MOVE ${gameState.turn}: 1stNeighbors: ${JSON.stringify({firstGradeNeighbors}, null, 2)}`);
+    writeToLog(debugLogStream, `MOVE ${gameState.turn}: 2ndNeighbors: ${JSON.stringify({secondGradeNeighbors}, null, 2)}`);
+
+    let uniqueSecondNeighbors = removeDuplicates(secondGradeNeighbors);
+
+    writeToLog(debugLogStream, `MOVE ${gameState.turn}: uniqNeighbors: ${JSON.stringify({uniqueSecondNeighbors}, null, 2)}`);
+    return secondGradeNeighbors;
+  }
 }
 
 export type SafeCoords = SafeCoord[];

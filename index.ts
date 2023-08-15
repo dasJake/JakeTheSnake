@@ -207,19 +207,14 @@ export function floodFill(
     return area;
   }
   const currentCoord: Coord = area[index];
-  const currentNeighbors: Array<Coord> = [
-    { ...currentCoord, x: currentCoord.x - 1 },
-    { ...currentCoord, x: currentCoord.x + 1 },
-    { ...currentCoord, y: currentCoord.y - 1 },
-    { ...currentCoord, y: currentCoord.y + 1 },
-  ];
+  const currentNeighbors: Array<Coord> = getNeighbors(currentCoord);
   const safeNeighborsNotInArea: Array<Coord> = currentNeighbors.filter(
     (coord) =>
       isCoordSafe(coord, board) &&
       !area.find((areaCoord) => coordEq(coord, areaCoord)),
   );
 
-  writeToLog(debugLogStream, `MOVE ${gameState.turn}| index: ${[index]} -- ${[...area, ...safeNeighborsNotInArea].length}`);
+ // writeToLog(debugLogStream, `MOVE ${gameState.turn}| index: ${[index]} -- ${[...area, ...safeNeighborsNotInArea].length}`);
   return floodFill([...area, ...safeNeighborsNotInArea], index + 1, board, gameState);
 }
 
@@ -227,7 +222,7 @@ function isCoordSafe(coord: Coord, board: Board): boolean {
   return isCoordInBounds(coord, board) && isCoordFree(coord, board);
 }
 
-function isCoordInBounds(coord: Coord, board: Board): boolean {
+export function isCoordInBounds(coord: Coord, board: Board): boolean {
   const boardWidth = board.width;
   const boardHeight = board.height;
 
@@ -260,7 +255,16 @@ function isCoordFree(coord: Coord, board: Board): boolean {
   return true;
 }
 
-function writeToLog(logStream: any, message: any): void {
+export function getNeighbors(currentCoord: Coord): Coord[] {
+  return [
+    { ...currentCoord, x: currentCoord.x - 1 },
+    { ...currentCoord, x: currentCoord.x + 1 },
+    { ...currentCoord, y: currentCoord.y - 1 },
+    { ...currentCoord, y: currentCoord.y + 1 },
+  ];
+}
+
+export function writeToLog(logStream: any, message: any): void {
   logStream.write(`${message}\n`);
 }
 
