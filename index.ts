@@ -23,10 +23,10 @@ import {
 import { SafeCoord, SafeCoords } from "./safe-coord.js";
 import * as fs from "fs";
 import * as util from "util";
-const gameLog = "game.log";
-const debugLog = "debug.log";
-let gameLogStream = fs.createWriteStream(gameLog);
-let debugLogStream = fs.createWriteStream(debugLog);
+export const gameLog = "game.log";
+export const debugLog = "debug.log";
+export let gameLogStream = fs.createWriteStream(gameLog);
+export let debugLogStream = fs.createWriteStream(debugLog);
 
 // info is called when you create your Battlesnake on play.battlesnake.com
 // and controls your Battlesnake's appearance
