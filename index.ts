@@ -143,15 +143,12 @@ function move(gameState: GameState): MoveResponse {
   }
 
   // determine safe coordinates
-  const snakeHeads: Coord[] = gameState.board.snakes.map((snake) => snake.head);
+  //const snakeHeads: Coord[] = gameState.board.snakes.map((snake) => snake.head);
 
   const foods: Coord[] = gameState.board.food;
 
   const safeCoords = determineSafeCoords(
     safeMoves,
-    myHead,
-    snakeHeads,
-    foods,
     gameState.board,
     gameState,
   );
@@ -185,9 +182,6 @@ function move(gameState: GameState): MoveResponse {
 
 function determineSafeCoords(
   safeMoves: Array<Move>,
-  myHead: Coord,
-  snakeHeads: Array<Coord>,
-  foods: Array<Coord>,
   board: Board,
   gameState: GameState
 ): SafeCoords {
@@ -195,9 +189,6 @@ function determineSafeCoords(
   for (const currentMove of safeMoves) {
     const currentSafeCoord = new SafeCoord(
       currentMove,
-      myHead,
-      snakeHeads,
-      foods,
       board,
       gameState,
     );

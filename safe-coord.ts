@@ -1,28 +1,36 @@
 import { GameState, Board, Coord, coordEq, Move } from "./types.js";
-import { floodFill } from "./index.js";
+import { 
+  floodFill,
+  isCoordInBounds,
+  getNeighbors,
+  writeToLog,
+  debugLogStream 
+} from "./index.js";
+import {
+  removeDuplicates,
+} from "./removeDuplicates.js";
 
 export class SafeCoord {
   move: Move;
   coord: Coord;
   rating: number;
-  isSomeonesHead: boolean; //useless because head will be somewhere else in the next move; instead anticipate if a head could land on this coord in the next move.
   hasFood: boolean;
   adjacentSafeCoords: number;
+  chanceToKill: any;
 
   constructor(
     currentMove: Move,
-    myHead: Coord,
-    snakeHeads: Array<Coord>,
-    foods: Array<Coord>,
     board: Board,
     gameState: GameState,
   ) {
     this.move = currentMove;
-    this.coord = this.setCoord(this.move, myHead);
-    this.isSomeonesHead = this.checkForHead(snakeHeads);
-    this.hasFood = this.checkForFood(foods);
+    this.coord = this.setCoord(this.move, gameState.you.body[0]);
+    this.hasFood = this.checkForFood(gameState);
+    writeToLog(debugLogStream, `MOVE ${gameState.turn}: head: ${JSON.stringify(gameState.you.head, null, 2)}`);
+    writeToLog(debugLogStream, `MOVE ${gameState.turn}: Coord: ${JSON.stringify(this.coord, null, 2)}`);
     this.adjacentSafeCoords = floodFill([this.coord], 0, board, gameState).length;
     this.rating = this.setRating();
+    this.chanceToKill = this.determineKillChance(gameState, this.coord);
   }
 
   setCoord(move: Move, myHead: Coord): Coord {
@@ -44,6 +52,7 @@ export class SafeCoord {
     return coord;
   }
 
+  /*
   checkForHead(snakeHeads: Array<Coord>): boolean {
     return Boolean(
       snakeHeads.find((currentCoord: Coord) =>
@@ -51,10 +60,11 @@ export class SafeCoord {
       ),
     );
   }
+  */
 
-  checkForFood(foods: Array<Coord>): boolean {
+  checkForFood(gameState: GameState): boolean {
     return Boolean(
-      foods.find((currentCoord: Coord) => coordEq(this.coord, currentCoord)),
+      gameState.board.food.find((currentCoord: Coord) => coordEq(this.coord, currentCoord)),
     );
   }
 
