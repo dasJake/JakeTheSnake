@@ -126,6 +126,12 @@ export class SafeCoord {
         killChance += 50;
       }
     });
+    smallerHeads.forEach((head) => {
+      if (secondGradeNeighbors.find((currentNeighbor: Coord) =>
+      coordEq(head, currentNeighbor))) {
+        killChance += 25;
+      }
+    });
     writeToLog(debugLogStream, `MOVE ${gameState.turn}: killChance: ${JSON.stringify({killChance}, null, 2)}`);
     /*
     writeToLog(debugLogStream, `MOVE ${gameState.turn}: 2ndNeighbors: ${JSON.stringify({secondGradeNeighbors}, null, 2)}`);
