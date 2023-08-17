@@ -30,8 +30,10 @@ export class SafeCoord {
     writeToLog(debugLogStream, `MOVE ${gameState.turn}: head: ${JSON.stringify(gameState.you.head, null, 2)}`);
     writeToLog(debugLogStream, `MOVE ${gameState.turn}: Coord: ${JSON.stringify(this.coord, null, 2)}`);
     this.adjacentSafeCoords = floodFill([this.coord], 0, board, gameState).length;
-    this.rating = this.setRating();
+    writeToLog(debugLogStream, `MOVE ${gameState.turn}: area: ${JSON.stringify(this.adjacentSafeCoords, null, 2)}`);
     this.chanceToKill = this.determineKillChance(gameState, this.coord);
+    this.rating = this.setRating(gameState);
+    writeToLog(debugLogStream, `MOVE ${gameState.turn}: rating: ${JSON.stringify(this.rating, null, 2)}`);
   }
 
   setCoord(move: Move, myHead: Coord): Coord {
@@ -69,12 +71,15 @@ export class SafeCoord {
     );
   }
 
-  setRating(): number {
+  setRating(gameState: GameState): number {
     let newRating: number = this.adjacentSafeCoords + 1;
+    
+    writeToLog(debugLogStream, `MOVE ${gameState.turn}: newRating1: ${JSON.stringify(newRating, null, 2)}`);
     if (this.hasFood) {
       newRating += 25;
     }
     newRating += this.chanceToKill;
+    writeToLog(debugLogStream, `MOVE ${gameState.turn}: newRating2: ${JSON.stringify(newRating, null, 2)}`);
     return newRating;
   }
 
