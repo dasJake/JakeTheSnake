@@ -9,6 +9,7 @@ import {
 import {
   removeDuplicates,
 } from "./removeDuplicates.js";
+import { findSmallerSnakeheads } from "./smallerHeads.js";
 
 export class SafeCoord {
   move: Move;
@@ -16,7 +17,7 @@ export class SafeCoord {
   rating: number;
   hasFood: boolean;
   adjacentSafeCoords: number;
-  chanceToKill: any;
+  chanceToKill: number;
 
   constructor(
     currentMove: Move,
@@ -73,10 +74,12 @@ export class SafeCoord {
     if (this.hasFood) {
       newRating += 25;
     }
+    newRating += this.chanceToKill;
     return newRating;
   }
 
-  determineKillChance(gameState: GameState, currentCoord: Coord): any {
+  determineKillChance(gameState: GameState, currentCoord: Coord): number {
+    let killChance = 0;
     const firstGradeNeighbors: Coord[] = getNeighbors(currentCoord);
     /*UNFINISHED: const secondGradeNeighbors: Coord[] = getNeighbors(currentCoord).map(
       (neighbor) => 
@@ -108,12 +111,25 @@ export class SafeCoord {
       getNeighbors(neighbor));
 
     writeToLog(debugLogStream, `MOVE ${gameState.turn}: 1stNeighbors: ${JSON.stringify({firstGradeNeighbors}, null, 2)}`);
+
+    let smallerHeads = findSmallerSnakeheads(gameState);
+    writeToLog(debugLogStream, `MOVE ${gameState.turn}: smallerHeads: ${JSON.stringify({smallerHeads}, null, 2)}`);
+
+    smallerHeads.forEach((head) => {
+      if (firstGradeNeighbors.find((currentNeighbor: Coord) =>
+      coordEq(head, currentNeighbor))) {
+        killChance += 50;
+      }
+    });
+    writeToLog(debugLogStream, `MOVE ${gameState.turn}: killChance: ${JSON.stringify({killChance}, null, 2)}`);
+    /*
     writeToLog(debugLogStream, `MOVE ${gameState.turn}: 2ndNeighbors: ${JSON.stringify({secondGradeNeighbors}, null, 2)}`);
 
     let uniqueSecondNeighbors = removeDuplicates(secondGradeNeighbors);
 
     writeToLog(debugLogStream, `MOVE ${gameState.turn}: uniqNeighbors: ${JSON.stringify({uniqueSecondNeighbors}, null, 2)}`);
-    return secondGradeNeighbors;
+    */
+    return killChance;
   }
 }
 
