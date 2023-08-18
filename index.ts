@@ -22,6 +22,7 @@ import {
 } from "./types.js";
 import { SafeCoord, SafeCoords } from "./classSafeCoord.js";
 import { isCoordSafe } from "./fnIsCoordSafe.js";
+import { getNeighbors } from "./fnGetNeighbors.js";
 import * as fs from "fs";
 import * as util from "util";
 export const gameLog = "game.log";
@@ -210,15 +211,6 @@ export function floodFill(
 
  // writeToLog(debugLogStream, `MOVE ${gameState.turn}| index: ${[index]} -- ${[...area, ...safeNeighborsNotInArea].length}`);
   return floodFill([...area, ...safeNeighborsNotInArea], index + 1, board, gameState);
-}
-
-export function getNeighbors(currentCoord: Coord): Coord[] {
-  return [
-    { ...currentCoord, x: currentCoord.x - 1 },
-    { ...currentCoord, x: currentCoord.x + 1 },
-    { ...currentCoord, y: currentCoord.y - 1 },
-    { ...currentCoord, y: currentCoord.y + 1 },
-  ];
 }
 
 export function writeToLog(logStream: any, message: any): void {

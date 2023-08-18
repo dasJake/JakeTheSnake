@@ -2,7 +2,6 @@ import { SafeCoord, SafeCoords } from "./classSafeCoord.js";
 import { GameState, Board, Coord, coordEq, Move } from "./types.js";
 import { 
   floodFill,
-  getNeighbors,
   writeToLog,
   debugLogStream 
 } from "./index.js";
