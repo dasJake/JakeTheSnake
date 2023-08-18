@@ -25,6 +25,7 @@ import { isCoordSafe } from "./fnIsCoordSafe.js";
 import { getNeighbors } from "./fnGetNeighbors.js";
 import * as fs from "fs";
 import * as util from "util";
+import { getMoveToCoordinate } from "./fnGetMoveToCoordinate.js";
 export const gameLog = "game.log";
 export const debugLog = "debug.log";
 export let gameLogStream = fs.createWriteStream(gameLog);
