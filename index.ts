@@ -62,13 +62,8 @@ function end(gameState: GameState): void {
 // move is called on every turn and returns your next move
 // Valid moves are "up", "down", "left", or "right"
 // See https://docs.battlesnake.com/api/example-move for available data
+
 function move(gameState: GameState): MoveResponse {
-  let isMoveSafe: { [key in Move]: boolean } = {
-    up: true,
-    down: true,
-    left: true,
-    right: true,
-  };
 
   // determine which move leads to my neck; this move will only be valid if there are no safe moves possible
   const myHead = gameState.you.body[0];
@@ -77,19 +72,15 @@ function move(gameState: GameState): MoveResponse {
 
   if (myNeck.x < myHead.x) {
     // Neck is left of head, don't move left
-   // isMoveSafe.left = false;
     neckMove = "left";
   } else if (myNeck.x > myHead.x) {
     // Neck is right of head, don't move right
-    //isMoveSafe.right = false;
     neckMove = "right";
   } else if (myNeck.y < myHead.y) {
     // Neck is below head, don't move down
-    //isMoveSafe.down = false;
     neckMove = "down";
   } else if (myNeck.y > myHead.y) {
     // Neck is above head, don't move up
-    //isMoveSafe.up = false;
     neckMove = "up";
   }
 
@@ -105,58 +96,9 @@ function move(gameState: GameState): MoveResponse {
   }
   writeToLog(debugLogStream, `MOVE ${gameState.turn}: movesToNeigh: ${JSON.stringify({movesToNeighbors}, null, 2)}`);
 
-  // TODO: Step 1 - Prevent your Battlesnake from moving out of bounds
-  const boardWidth = gameState.board.width;
-  const boardHeight = gameState.board.height;
-
-  if (myHead.x == 0) {
-    isMoveSafe.left = false;
-  }
-  if (myHead.y == 0) {
-    isMoveSafe.down = false;
-  }
-  if (myHead.x == boardWidth - 1) {
-    isMoveSafe.right = false;
-  }
-  if (myHead.y == boardHeight - 1) {
-    isMoveSafe.up = false;
-  }
-
-  // TODO: Step 2 - Prevent your Battlesnake from colliding with itself and other snakes
-
-  // slice last element/tail because it will be possible to move where the tail is now
-  const myBody = gameState.you.body.slice(0, -1);
-
-  gameState.board.snakes.forEach((snake) =>
-    snake.body.slice(0, -1).forEach((cell) => myBody.push(cell)),
-  );
-
-  // illegal up
-  if (myBody.find((cell) => cell.x == myHead.x && cell.y == myHead.y + 1)) {
-    isMoveSafe.up = false;
-  }
-
-  // illegal down
-  if (myBody.find((cell) => cell.x == myHead.x && cell.y == myHead.y - 1)) {
-    isMoveSafe.down = false;
-  }
-
-  // illegal left
-  if (myBody.find((cell) => cell.x == myHead.x - 1 && cell.y == myHead.y)) {
-    isMoveSafe.left = false;
-  }
-
-  // illegal right
-  if (myBody.find((cell) => cell.x == myHead.x + 1 && cell.y == myHead.y)) {
-    isMoveSafe.right = false;
-  }
-  // TODO: Step 3 - Prevent your Battlesnake from colliding with other Battlesnakes
-  // opponents = gameState.board.snakes;
-
   // Are there any safe moves left?
   if (movesToNeighbors.length == 0) {
     writeToLog(gameLogStream, `MOVE ${gameState.turn}: No safe moves detected! Moving backwards`);
-    //writeToLog(gameLogStream, `MOVE ${gameState.turn}: No safe moves detected! Moving ${neckMove}`);
     return { move: neckMove };
   }
 
