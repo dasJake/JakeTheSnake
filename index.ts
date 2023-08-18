@@ -143,7 +143,8 @@ function move(gameState: GameState): MoveResponse {
     (key) => isMoveSafe[key as Move],
   ) as Move[];
   if (safeMoves.length == 0) {
-    writeToLog(gameLogStream, `MOVE ${gameState.turn}: No safe moves detected! Moving ${neckMove}`);
+    writeToLog(gameLogStream, `MOVE ${gameState.turn}: No safe moves detected! Moving backwards`);
+    //writeToLog(gameLogStream, `MOVE ${gameState.turn}: No safe moves detected! Moving ${neckMove}`);
     return { move: neckMove };
   }
 
@@ -159,29 +160,20 @@ function move(gameState: GameState): MoveResponse {
   );
 
   // Choose move according to rating
-  const allAreasEqual = safeCoords.reduce((accumulator, currentValue) => {
-    if (currentValue.rating !== accumulator.acc.rating){
-      return {...accumulator, result: false}
-    }
-    return accumulator
-  }, {
-    result: true,
-    acc: safeCoords[0],
-  }).result;
+  const highestRatedCoords: SafeCoord[] = safeCoords.filter(coord =>
+    coord.rating === Math.max(...safeCoords.map(c => c.rating))
+  );
+  if (highestRatedCoords.length === 1) {
+  const nextMove: Move = highestRatedCoords[0].move;
 
-  if (!allAreasEqual){
-  const nextMove: Move = safeCoords.reduce((accumulator, currentValue) =>
-    accumulator.rating > currentValue.rating ? accumulator : currentValue,
-  ).move;
-
-    writeToLog(gameLogStream, `MOVE ${gameState.turn}: Multiple areas detected, moving to largest`);
+    writeToLog(gameLogStream, `MOVE ${gameState.turn}: moving ${nextMove} to highest rated Coord`);
   return {move: nextMove};
   }
 
-  // Choose a random move from the safe moves
-  const nextMove = safeMoves[Math.floor(Math.random() * safeMoves.length)];
+  // Choose a random move if multiple highest coords rated highest
+  const nextMove = highestRatedCoords[Math.floor(Math.random() * safeMoves.length)].move;
 
-  writeToLog(gameLogStream, `MOVE ${gameState.turn}: ${nextMove}`);
+  writeToLog(gameLogStream, `MOVE ${gameState.turn}: all moves rated same, moving ${nextMove}`);
   return { move: nextMove };
 }
 
