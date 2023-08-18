@@ -70,19 +70,24 @@ function move(gameState: GameState): MoveResponse {
   // We've included code to prevent your Battlesnake from moving backwards
   const myHead = gameState.you.body[0];
   const myNeck = gameState.you.body[1];
+  let neckMove: Move = "left";
 
   if (myNeck.x < myHead.x) {
     // Neck is left of head, don't move left
-    isMoveSafe.left = false;
+   // isMoveSafe.left = false;
+    neckMove = "left";
   } else if (myNeck.x > myHead.x) {
     // Neck is right of head, don't move right
-    isMoveSafe.right = false;
+    //isMoveSafe.right = false;
+    neckMove = "right";
   } else if (myNeck.y < myHead.y) {
     // Neck is below head, don't move down
-    isMoveSafe.down = false;
+    //isMoveSafe.down = false;
+    neckMove = "down";
   } else if (myNeck.y > myHead.y) {
     // Neck is above head, don't move up
-    isMoveSafe.up = false;
+    //isMoveSafe.up = false;
+    neckMove = "up";
   }
 
   // TODO: Step 1 - Prevent your Battlesnake from moving out of bounds
@@ -138,8 +143,8 @@ function move(gameState: GameState): MoveResponse {
     (key) => isMoveSafe[key as Move],
   ) as Move[];
   if (safeMoves.length == 0) {
-    writeToLog(gameLogStream, `MOVE ${gameState.turn}: No safe moves detected! Moving down`);
-    return { move: "down" };
+    writeToLog(gameLogStream, `MOVE ${gameState.turn}: No safe moves detected! Moving ${neckMove}`);
+    return { move: neckMove };
   }
 
   // determine safe coordinates
