@@ -81,3 +81,5 @@ export interface MoveResponse {
   move: Move;
   shout?: string;
 }
+
+export type SafeMarker = "safe";
