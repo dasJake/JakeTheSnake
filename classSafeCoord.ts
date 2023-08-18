@@ -8,8 +8,8 @@ import {
 } from "./index.js";
 import {
   removeDuplicates,
-} from "./removeDuplicates.js";
-import { findSmallerSnakeheads } from "./smallerHeads.js";
+} from "./fnRemoveDuplicates.js";
+import { findSmallerSnakeheads } from "./fnSmallerHeads.js";
 
 export class SafeCoord {
   move: Move;

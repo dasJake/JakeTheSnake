@@ -1,4 +1,4 @@
-import { SafeCoord, SafeCoords } from "./safe-coord.js";
+import { SafeCoord, SafeCoords } from "./classSafeCoord.js";
 import { GameState, Board, Coord, coordEq, Move } from "./types.js";
 import { 
   floodFill,

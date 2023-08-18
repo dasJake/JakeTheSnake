@@ -20,7 +20,7 @@ import {
   Move,
   MoveResponse,
 } from "./types.js";
-import { SafeCoord, SafeCoords } from "./safe-coord.js";
+import { SafeCoord, SafeCoords } from "./classSafeCoord.js";
 import * as fs from "fs";
 import * as util from "util";
 export const gameLog = "game.log";
