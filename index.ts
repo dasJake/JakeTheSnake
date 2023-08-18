@@ -93,6 +93,18 @@ function move(gameState: GameState): MoveResponse {
     neckMove = "up";
   }
 
+  // find safe neighbors to the neck
+  const safeNeighbors = getNeighbors(myHead, gameState.board, "safe");
+  const movesToNeighbors: Move[] = [];
+  for (const currentNeighbor of safeNeighbors) {
+    const currentMoveToNeighbor = getMoveToCoordinate(
+      myHead,
+      currentNeighbor
+    );
+    movesToNeighbors.push(currentMoveToNeighbor);
+  }
+  writeToLog(debugLogStream, `MOVE ${gameState.turn}: movesToNeigh: ${JSON.stringify({movesToNeighbors}, null, 2)}`);
+
   // TODO: Step 1 - Prevent your Battlesnake from moving out of bounds
   const boardWidth = gameState.board.width;
   const boardHeight = gameState.board.height;
@@ -142,10 +154,7 @@ function move(gameState: GameState): MoveResponse {
   // opponents = gameState.board.snakes;
 
   // Are there any safe moves left?
-  const safeMoves = Object.keys(isMoveSafe).filter(
-    (key) => isMoveSafe[key as Move],
-  ) as Move[];
-  if (safeMoves.length == 0) {
+  if (movesToNeighbors.length == 0) {
     writeToLog(gameLogStream, `MOVE ${gameState.turn}: No safe moves detected! Moving backwards`);
     //writeToLog(gameLogStream, `MOVE ${gameState.turn}: No safe moves detected! Moving ${neckMove}`);
     return { move: neckMove };
@@ -153,7 +162,7 @@ function move(gameState: GameState): MoveResponse {
 
   // determine safe coordinates
   const safeCoords = determineSafeCoords(
-    safeMoves,
+    movesToNeighbors,
     gameState.board,
     gameState,
   );
@@ -170,19 +179,19 @@ function move(gameState: GameState): MoveResponse {
   }
 
   // Choose a random move if multiple highest coords rated highest
-  const nextMove = highestRatedCoords[Math.floor(Math.random() * safeMoves.length)].move;
+  const nextMove = highestRatedCoords[Math.floor(Math.random() * movesToNeighbors.length)].move;
 
   writeToLog(gameLogStream, `MOVE ${gameState.turn}: all moves rated same, moving ${nextMove}`);
   return { move: nextMove };
 }
 
 function determineSafeCoords(
-  safeMoves: Array<Move>,
+  movesToNeighbors: Array<Move>,
   board: Board,
   gameState: GameState
 ): SafeCoords {
   const safeCoords: SafeCoords = [];
-  for (const currentMove of safeMoves) {
+  for (const currentMove of movesToNeighbors) {
     const currentSafeCoord = new SafeCoord(
       currentMove,
       board,
