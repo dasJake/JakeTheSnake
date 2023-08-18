@@ -84,7 +84,7 @@ export class SafeCoord {
 
   determineKillChance(gameState: GameState, currentCoord: Coord): number {
     let killChance = 0;
-    const firstGradeNeighbors: Coord[] = getNeighbors(currentCoord);
+    const firstGradeNeighbors: Coord[] = getNeighbors(currentCoord, gameState.board);
     /*UNFINISHED: const secondGradeNeighbors: Coord[] = getNeighbors(currentCoord).map(
       (neighbor) => 
       getNeighbors(neighbor)).reduce((accumulator, currentValue) => { 
@@ -112,7 +112,7 @@ export class SafeCoord {
 */
     let secondGradeNeighbors = firstGradeNeighbors.
       flatMap((neighbor) => 
-      getNeighbors(neighbor));
+      getNeighbors(neighbor, gameState.board));
 
     writeToLog(debugLogStream, `MOVE ${gameState.turn}: 1stNeighbors: ${JSON.stringify({firstGradeNeighbors}, null, 2)}`);
 
@@ -132,13 +132,11 @@ export class SafeCoord {
       }
     });
     writeToLog(debugLogStream, `MOVE ${gameState.turn}: killChance: ${JSON.stringify({killChance}, null, 2)}`);
-    /*
     writeToLog(debugLogStream, `MOVE ${gameState.turn}: 2ndNeighbors: ${JSON.stringify({secondGradeNeighbors}, null, 2)}`);
 
     let uniqueSecondNeighbors = removeDuplicates(secondGradeNeighbors);
 
     writeToLog(debugLogStream, `MOVE ${gameState.turn}: uniqNeighbors: ${JSON.stringify({uniqueSecondNeighbors}, null, 2)}`);
-    */
     return killChance;
   }
 }

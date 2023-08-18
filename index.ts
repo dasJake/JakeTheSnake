@@ -202,7 +202,7 @@ export function floodFill(
     return area;
   }
   const currentCoord: Coord = area[index];
-  const currentNeighbors: Array<Coord> = getNeighbors(currentCoord);
+  const currentNeighbors: Array<Coord> = getNeighbors(currentCoord, board);
   const safeNeighborsNotInArea: Array<Coord> = currentNeighbors.filter(
     (coord) =>
       isCoordSafe(coord, board) &&
