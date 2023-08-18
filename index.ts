@@ -116,12 +116,16 @@ function move(gameState: GameState): MoveResponse {
   if (highestRatedCoords.length === 1) {
   const nextMove: Move = highestRatedCoords[0].move;
 
+    writeToLog(debugLogStream, `MOVE ${gameState.turn}: highestRatedCoords: ${JSON.stringify({highestRatedCoords}, null, 2)}`);
     writeToLog(gameLogStream, `MOVE ${gameState.turn}: moving ${nextMove} to highest rated Coord`);
   return {move: nextMove};
   }
 
   // Choose a random move if multiple highest coords rated highest
   const nextMove = highestRatedCoords[Math.floor(Math.random() * movesToNeighbors.length)].move;
+  if (!highestRatedCoords) {
+      writeToLog(debugLogStream, `MOVE ${gameState.turn}: ULTRAERROR`);
+  }
 
   writeToLog(gameLogStream, `MOVE ${gameState.turn}: all moves rated same, moving ${nextMove}`);
   return { move: nextMove };
