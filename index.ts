@@ -69,7 +69,7 @@ function move(gameState: GameState): MoveResponse {
     right: true,
   };
 
-  // We've included code to prevent your Battlesnake from moving backwards
+  // determine which move leads to my neck; this move will only be valid if there are no safe moves possible
   const myHead = gameState.you.body[0];
   const myNeck = gameState.you.body[1];
   let neckMove: Move = "left";
