@@ -86,6 +86,14 @@ function move(gameState: GameState): MoveResponse {
 
   // find safe neighbors to the neck
   const safeNeighbors = getNeighbors(myHead, gameState.board, "safe");
+  
+  // if no safe neighbors found bite your own neck
+  if (!safeNeighbors) {
+    writeToLog(gameLogStream, `MOVE ${gameState.turn}: No safe moves detected! Moving backwards`);
+    return { move: neckMove };
+  }
+
+  // determine moves to safe neighbors
   const movesToNeighbors: Move[] = [];
   for (const currentNeighbor of safeNeighbors) {
     const currentMoveToNeighbor = getMoveToCoordinate(
@@ -96,13 +104,8 @@ function move(gameState: GameState): MoveResponse {
   }
   writeToLog(debugLogStream, `MOVE ${gameState.turn}: movesToNeigh: ${JSON.stringify({movesToNeighbors}, null, 2)}`);
 
-  // Are there any safe moves left?
-  if (movesToNeighbors.length == 0) {
-    writeToLog(gameLogStream, `MOVE ${gameState.turn}: No safe moves detected! Moving backwards`);
-    return { move: neckMove };
-  }
-
   // determine safe coordinates
+  //TODO: turn it around: find moves by coords; not coords by moves
   const safeCoords = determineSafeCoords(
     movesToNeighbors,
     gameState.board,
