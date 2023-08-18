@@ -21,6 +21,7 @@ import {
   MoveResponse,
 } from "./types.js";
 import { SafeCoord, SafeCoords } from "./classSafeCoord.js";
+import { isCoordSafe } from "./fnIsCoordSafe.js";
 import * as fs from "fs";
 import * as util from "util";
 export const gameLog = "game.log";
@@ -209,43 +210,6 @@ export function floodFill(
 
  // writeToLog(debugLogStream, `MOVE ${gameState.turn}| index: ${[index]} -- ${[...area, ...safeNeighborsNotInArea].length}`);
   return floodFill([...area, ...safeNeighborsNotInArea], index + 1, board, gameState);
-}
-
-function isCoordSafe(coord: Coord, board: Board): boolean {
-  return isCoordInBounds(coord, board) && isCoordFree(coord, board);
-}
-
-export function isCoordInBounds(coord: Coord, board: Board): boolean {
-  const boardWidth = board.width;
-  const boardHeight = board.height;
-
-  if (coord.x < 0) {
-    return false;
-  }
-  if (coord.x >= board.width) {
-    return false;
-  }
-  if (coord.y < 0) {
-    return false;
-  }
-  if (coord.y >= board.width) {
-    return false;
-  }
-  return true;
-}
-
-function isCoordFree(coord: Coord, board: Board): boolean {
-  if (board.hazards.find((hazardCoord) => coordEq(coord, hazardCoord))) {
-    return false;
-  }
-  if (
-    board.snakes.some((snake) =>
-      snake.body.slice(0, -1).find((snakeCoord) => coordEq(coord, snakeCoord)),
-    )
-  ) {
-    return false;
-  }
-  return true;
 }
 
 export function getNeighbors(currentCoord: Coord): Coord[] {

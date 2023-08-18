@@ -1,7 +1,6 @@
 import { GameState, Board, Coord, coordEq, Move } from "./types.js";
 import { 
   floodFill,
-  isCoordInBounds,
   getNeighbors,
   writeToLog,
   debugLogStream 
