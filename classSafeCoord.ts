@@ -9,9 +9,10 @@ import {
 } from "./fnRemoveDuplicates.js";
 import { findSmallerSnakeheads } from "./fnSmallerHeads.js";
 import { getNeighbors } from "./fnGetNeighbors.js";
+import { getMoveToCoordinate } from "./fnGetMoveToCoordinate.js";
 
 export class SafeCoord {
-  move: Move;
+  moveToCoord: Move;
   coord: Coord;
   rating: number;
   hasFood: boolean;
@@ -19,12 +20,12 @@ export class SafeCoord {
   chanceToKill: number;
 
   constructor(
-    currentMove: Move,
+    currentNeighbor: Coord,
     board: Board,
     gameState: GameState,
   ) {
-    this.move = currentMove;
-    this.coord = this.setCoord(this.move, gameState.you.body[0]);
+    this.coord = currentNeighbor;
+    this.moveToCoord = getMoveToCoordinate(gameState.you.head, this.coord);
     this.hasFood = this.checkForFood(gameState);
     writeToLog(debugLogStream, `MOVE ${gameState.turn}: head: ${JSON.stringify(gameState.you.head, null, 2)}`);
     writeToLog(debugLogStream, `MOVE ${gameState.turn}: Coord: ${JSON.stringify(this.coord, null, 2)}`);
@@ -34,7 +35,7 @@ export class SafeCoord {
     this.rating = this.setRating(gameState);
     writeToLog(debugLogStream, `MOVE ${gameState.turn}: rating: ${JSON.stringify(this.rating, null, 2)}`);
   }
-
+/*
   setCoord(move: Move, myHead: Coord): Coord {
     const coord = { ...myHead }; // Create a new object with the same properties as myHead
     switch (move) {
@@ -53,7 +54,7 @@ export class SafeCoord {
     }
     return coord;
   }
-
+*/
   /*
   checkForHead(snakeHeads: Array<Coord>): boolean {
     return Boolean(

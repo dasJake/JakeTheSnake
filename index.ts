@@ -93,6 +93,7 @@ function move(gameState: GameState): MoveResponse {
     return { move: neckMove };
   }
 
+  /*
   // determine moves to safe neighbors
   const movesToNeighbors: Move[] = [];
   for (const currentNeighbor of safeNeighbors) {
@@ -103,11 +104,12 @@ function move(gameState: GameState): MoveResponse {
     movesToNeighbors.push(currentMoveToNeighbor);
   }
   writeToLog(debugLogStream, `MOVE ${gameState.turn}: movesToNeigh: ${JSON.stringify({movesToNeighbors}, null, 2)}`);
+  */
 
   // determine safe coordinates
   //TODO: turn it around: find moves by coords; not coords by moves
   const safeCoords = determineSafeCoords(
-    movesToNeighbors,
+    safeNeighbors,
     gameState.board,
     gameState,
   );
@@ -117,7 +119,7 @@ function move(gameState: GameState): MoveResponse {
     coord.rating === Math.max(...safeCoords.map(c => c.rating))
   );
   if (highestRatedCoords.length === 1) {
-  const nextMove: Move = highestRatedCoords[0].move;
+  const nextMove: Move = highestRatedCoords[0].moveToCoord;
 
     writeToLog(debugLogStream, `MOVE ${gameState.turn}: highestRatedCoords: ${JSON.stringify({highestRatedCoords}, null, 2)}`);
     writeToLog(gameLogStream, `MOVE ${gameState.turn}: moving ${nextMove} to highest rated Coord`);
@@ -125,7 +127,7 @@ function move(gameState: GameState): MoveResponse {
   }
 
   // Choose a random move if multiple highest coords rated highest
-  const nextMove = highestRatedCoords[Math.floor(Math.random() * movesToNeighbors.length)].move;
+  const nextMove = highestRatedCoords[Math.floor(Math.random() * highestRatedCoords.length)].moveToCoord;
   if (!highestRatedCoords) {
       writeToLog(debugLogStream, `MOVE ${gameState.turn}: ULTRAERROR`);
   }
@@ -135,14 +137,14 @@ function move(gameState: GameState): MoveResponse {
 }
 
 function determineSafeCoords(
-  movesToNeighbors: Array<Move>,
+  safeNeighbors: Array<Coord>,
   board: Board,
   gameState: GameState
 ): SafeCoords {
   const safeCoords: SafeCoords = [];
-  for (const currentMove of movesToNeighbors) {
+  for (const currentNeighbor of safeNeighbors) {
     const currentSafeCoord = new SafeCoord(
-      currentMove,
+      currentNeighbor,
       board,
       gameState,
     );
