@@ -1,15 +1,18 @@
 import { GameState, Board, Coord, coordEq, Move } from "./types.js";
-import { 
-  floodFill,
-  writeToLog,
-  debugLogStream 
-} from "./index.js";
 import {
   removeDuplicates,
 } from "./fnRemoveDuplicates.js";
 import { findSmallerSnakeheads } from "./fnSmallerHeads.js";
 import { getNeighbors } from "./fnGetNeighbors.js";
 import { getMoveToCoordinate } from "./fnGetMoveToCoordinate.js";
+import { floodFill } from "./fnFloodFill.js";
+import {
+  gameLog,
+  gameLogStream,
+  debugLog,
+  debugLogStream,
+  writeToLog,
+} from "./fnLogging.js";
 
 export class SafeCoord {
   moveToCoord: Move;

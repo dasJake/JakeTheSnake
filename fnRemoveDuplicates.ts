@@ -1,10 +1,11 @@
-import { SafeCoord, SafeCoords } from "./classSafeCoord.js";
-import { GameState, Board, Coord, coordEq, Move } from "./types.js";
-import { 
-  floodFill,
+import { Coord, coordEq } from "./types.js";
+import {
+  gameLog,
+  gameLogStream,
+  debugLog,
+  debugLogStream,
   writeToLog,
-  debugLogStream 
-} from "./index.js";
+} from "./fnLogging.js";
 
 export function removeDuplicates(coords: Coord[]): Coord[] {
    let accumulator: Array<Coord> = [coords[0]];

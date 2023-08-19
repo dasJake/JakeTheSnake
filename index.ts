@@ -23,15 +23,23 @@ import {
 import { SafeCoord, SafeCoords } from "./classSafeCoord.js";
 import { getNeighbors } from "./fnGetNeighbors.js";
 import * as fs from "fs";
-export const gameLog = "game.log";
-export const debugLog = "debug.log";
-export let gameLogStream = fs.createWriteStream(gameLog);
-export let debugLogStream = fs.createWriteStream(debugLog);
+import { determineSafeCoords } from "./fnDetermineSafCoords.js";
+import {
+  gameLog,
+  gameLogStream,
+  debugLog,
+  debugLogStream,
+  writeToLog,
+  resetGameLogStream,
+} from "./fnLogging.js";
 
 // info is called when you create your Battlesnake on play.battlesnake.com
 // and controls your Battlesnake's appearance
 // TIP: If you open your Battlesnake URL in a browser you should see this data
 function info(): InfoResponse {
+  gameLogStream.end(); //causes for a new log file to be written
+  fs.truncateSync(gameLog, 0); //keeps file open
+  resetGameLogStream(); //reopen after .end()
   writeToLog(gameLogStream, "INFO");
 
   return {
@@ -45,9 +53,6 @@ function info(): InfoResponse {
 
 // start is called when your Battlesnake begins a game
 function start(gameState: GameState): void {
-  gameLogStream.end();
-  fs.truncateSync(gameLog, 0);
-  gameLogStream = fs.createWriteStream(gameLog);
   writeToLog(gameLogStream, "GAME START");
 }
 
@@ -114,47 +119,6 @@ function move(gameState: GameState): MoveResponse {
 
   writeToLog(gameLogStream, `MOVE ${gameState.turn}: all moves rated same, moving ${nextMove}`);
   return { move: nextMove };
-}
-
-function determineSafeCoords(
-  safeNeighbors: Array<Coord>,
-  board: Board,
-  gameState: GameState
-): SafeCoords {
-  const safeCoords: SafeCoords = [];
-  for (const currentNeighbor of safeNeighbors) {
-    const currentSafeCoord = new SafeCoord(
-      currentNeighbor,
-      board,
-      gameState,
-    );
-    safeCoords.push(currentSafeCoord);
-  }
-  return safeCoords;
-}
-
-export function floodFill(
-  area: Array<Coord>,
-  index: number,
-  board: Board,
-  gameState: GameState,
-): Array<Coord> {
-  if (index >= area.length) {
-    return area;
-  }
-  const currentCoord: Coord = area[index];
-  const currentSafeNeighbors: Array<Coord> = getNeighbors(currentCoord, board, "safe");
-  const safeNeighborsNotInArea: Array<Coord> = currentSafeNeighbors.filter(
-    (coord) =>
-      !area.find((areaCoord) => coordEq(coord, areaCoord)),
-  );
-
- // writeToLog(debugLogStream, `MOVE ${gameState.turn}| index: ${[index]} -- ${[...area, ...safeNeighborsNotInArea].length}`);
-  return floodFill([...area, ...safeNeighborsNotInArea], index + 1, board, gameState);
-}
-
-export function writeToLog(logStream: any, message: any): void {
-  logStream.write(`${message}\n`);
 }
 
 runServer({

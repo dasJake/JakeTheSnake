@@ -1,10 +1,13 @@
 import { GameState,
     Coord,
 } from "./types.js";
-import { 
+import {
+  gameLog,
+  gameLogStream,
+  debugLog,
+  debugLogStream,
   writeToLog,
-  debugLogStream 
-} from "./index.js";
+} from "./fnLogging.js";
 
 export function findSmallerSnakeheads(gameState: GameState): Coord[] {
     let smallerHeads: Array<Coord> = [];

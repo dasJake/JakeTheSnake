@@ -1,7 +1,6 @@
 .DS_Store
 
-game.log
-debug.log
+log.*
 build
 node_modules
 .build/
