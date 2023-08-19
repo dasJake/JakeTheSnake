@@ -88,7 +88,7 @@ function move(gameState: GameState): MoveResponse {
   const safeNeighbors = getNeighbors(myHead, gameState.board, "safe");
   
   // if no safe neighbors found bite your own neck
-  if (!safeNeighbors) {
+  if (safeNeighbors.length === 0) {
     writeToLog(gameLogStream, `MOVE ${gameState.turn}: No safe moves detected! Moving backwards`);
     return { move: neckMove };
   }
