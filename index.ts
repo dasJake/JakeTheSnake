@@ -114,6 +114,8 @@ function move(gameState: GameState): MoveResponse {
     gameState,
   );
 
+    writeToLog(debugLogStream, `MOVE ${gameState.turn}: safeNeighbors: ${JSON.stringify({safeNeighbors}, null, 2)}`);
+    writeToLog(debugLogStream, `MOVE ${gameState.turn}: safeCoords: ${JSON.stringify({safeCoords}, null, 2)}`);
   // Choose move according to rating
   const highestRatedCoords: SafeCoord[] = safeCoords.filter(coord =>
     coord.rating === Math.max(...safeCoords.map(c => c.rating))
