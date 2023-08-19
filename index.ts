@@ -84,7 +84,7 @@ function move(gameState: GameState): MoveResponse {
     neckMove = "up";
   }
 
-  // find safe neighbors to the neck
+  // find safe neighbors to the head
   const safeNeighbors = getNeighbors(myHead, gameState.board, "safe");
   
   // if no safe neighbors found bite your own neck
