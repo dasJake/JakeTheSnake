@@ -21,11 +21,8 @@ import {
   MoveResponse,
 } from "./types.js";
 import { SafeCoord, SafeCoords } from "./classSafeCoord.js";
-import { isCoordSafe } from "./fnIsCoordSafe.js";
 import { getNeighbors } from "./fnGetNeighbors.js";
 import * as fs from "fs";
-import * as util from "util";
-import { getMoveToCoordinate } from "./fnGetMoveToCoordinate.js";
 export const gameLog = "game.log";
 export const debugLog = "debug.log";
 export let gameLogStream = fs.createWriteStream(gameLog);
@@ -93,29 +90,13 @@ function move(gameState: GameState): MoveResponse {
     return { move: neckMove };
   }
 
-  /*
-  // determine moves to safe neighbors
-  const movesToNeighbors: Move[] = [];
-  for (const currentNeighbor of safeNeighbors) {
-    const currentMoveToNeighbor = getMoveToCoordinate(
-      myHead,
-      currentNeighbor
-    );
-    movesToNeighbors.push(currentMoveToNeighbor);
-  }
-  writeToLog(debugLogStream, `MOVE ${gameState.turn}: movesToNeigh: ${JSON.stringify({movesToNeighbors}, null, 2)}`);
-  */
-
   // determine safe coordinates
-  //TODO: turn it around: find moves by coords; not coords by moves
   const safeCoords = determineSafeCoords(
     safeNeighbors,
     gameState.board,
     gameState,
   );
 
-    writeToLog(debugLogStream, `MOVE ${gameState.turn}: safeNeighbors: ${JSON.stringify({safeNeighbors}, null, 2)}`);
-    writeToLog(debugLogStream, `MOVE ${gameState.turn}: safeCoords: ${JSON.stringify({safeCoords}, null, 2)}`);
   // Choose move according to rating
   const highestRatedCoords: SafeCoord[] = safeCoords.filter(coord =>
     coord.rating === Math.max(...safeCoords.map(c => c.rating))
@@ -128,11 +109,8 @@ function move(gameState: GameState): MoveResponse {
   return {move: nextMove};
   }
 
-  // Choose a random move if multiple highest coords rated highest
+  // Choose a random move if multiple coords rated highest
   const nextMove = highestRatedCoords[Math.floor(Math.random() * highestRatedCoords.length)].moveToCoord;
-  if (!highestRatedCoords) {
-      writeToLog(debugLogStream, `MOVE ${gameState.turn}: ULTRAERROR`);
-  }
 
   writeToLog(gameLogStream, `MOVE ${gameState.turn}: all moves rated same, moving ${nextMove}`);
   return { move: nextMove };
