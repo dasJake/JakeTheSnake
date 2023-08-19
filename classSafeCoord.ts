@@ -2,7 +2,7 @@ import { GameState, Board, Coord, coordEq, Move } from "./types.js";
 import {
   removeDuplicates,
 } from "./fnRemoveDuplicates.js";
-import { findSmallerSnakeheads } from "./fnSmallerHeads.js";
+import { findSnakeheads } from "./fnFindSnakeHeads.js";
 import { getNeighbors } from "./fnGetNeighbors.js";
 import { getMoveToCoordinate } from "./fnGetMoveToCoordinate.js";
 import { floodFill } from "./fnFloodFill.js";
@@ -21,6 +21,7 @@ export class SafeCoord {
   hasFood: boolean;
   adjacentSafeCoords: number;
   chanceToKill: number;
+  riskToBeKilled: number;
 
   constructor(
     currentNeighbor: Coord,
@@ -35,6 +36,7 @@ export class SafeCoord {
     this.adjacentSafeCoords = floodFill([this.coord], 0, board, gameState).length;
     writeToLog(debugLogStream, `MOVE ${gameState.turn}: area: ${JSON.stringify(this.adjacentSafeCoords, null, 2)}`);
     this.chanceToKill = this.determineKillChance(gameState, this.coord);
+    this.riskToBeKilled = this.determineRiskToKilled();
     this.rating = this.setRating(gameState);
     writeToLog(debugLogStream, `MOVE ${gameState.turn}: rating: ${JSON.stringify(this.rating, null, 2)}`);
   }
@@ -70,7 +72,7 @@ export class SafeCoord {
 
    // writeToLog(debugLogStream, `MOVE ${gameState.turn}: 1stNeighbors: ${JSON.stringify({firstGradeNeighbors}, null, 2)}`);
 
-    let smallerHeads = findSmallerSnakeheads(gameState);
+    let smallerHeads = findSnakeheads(gameState, "smaller");
     //writeToLog(debugLogStream, `MOVE ${gameState.turn}: smallerHeads: ${JSON.stringify({smallerHeads}, null, 2)}`);
 
     smallerHeads.forEach((head) => {
@@ -85,6 +87,21 @@ export class SafeCoord {
         killChance += 25;
       }
     });
+    let biggerHeads = findSnakeheads(gameState, "bigger");
+    //writeToLog(debugLogStream, `MOVE ${gameState.turn}: smallerHeads: ${JSON.stringify({smallerHeads}, null, 2)}`);
+
+    biggerHeads.forEach((head) => {
+      if (firstGradeNeighbors.find((currentNeighbor: Coord) =>
+      coordEq(head, currentNeighbor))) {
+        killChance -= 70;
+      }
+    });
+    biggerHeads.forEach((head) => {
+      if (secondGradeNeighbors.find((currentNeighbor: Coord) =>
+      coordEq(head, currentNeighbor))) {
+        killChance -= 40;
+      }
+    });
     //writeToLog(debugLogStream, `MOVE ${gameState.turn}: killChance: ${JSON.stringify({killChance}, null, 2)}`);
     //writeToLog(debugLogStream, `MOVE ${gameState.turn}: 2ndNeighbors: ${JSON.stringify({secondGradeNeighbors}, null, 2)}`);
 
@@ -92,6 +109,10 @@ export class SafeCoord {
 
     //writeToLog(debugLogStream, `MOVE ${gameState.turn}: uniqNeighbors: ${JSON.stringify({uniqueSecondNeighbors}, null, 2)}`);
     return killChance;
+  }
+
+ determineRiskToKilled(): number {
+  return 0;
   }
 }
 
