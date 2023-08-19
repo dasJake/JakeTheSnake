@@ -88,7 +88,7 @@ export class SafeCoord {
       }
     });
     let biggerHeads = findSnakeheads(gameState, "bigger");
-    //writeToLog(debugLogStream, `MOVE ${gameState.turn}: smallerHeads: ${JSON.stringify({smallerHeads}, null, 2)}`);
+    writeToLog(debugLogStream, `MOVE ${gameState.turn}: biggerHeads: ${JSON.stringify({biggerHeads}, null, 2)}`);
 
     biggerHeads.forEach((head) => {
       if (firstGradeNeighbors.find((currentNeighbor: Coord) =>
