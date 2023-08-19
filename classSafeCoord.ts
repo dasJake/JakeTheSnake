@@ -38,35 +38,6 @@ export class SafeCoord {
     this.rating = this.setRating(gameState);
     writeToLog(debugLogStream, `MOVE ${gameState.turn}: rating: ${JSON.stringify(this.rating, null, 2)}`);
   }
-/*
-  setCoord(move: Move, myHead: Coord): Coord {
-    const coord = { ...myHead }; // Create a new object with the same properties as myHead
-    switch (move) {
-      case "up":
-        coord.y++;
-        break;
-      case "down":
-        coord.y--;
-        break;
-      case "left":
-        coord.x--;
-        break;
-      case "right":
-        coord.x++;
-        break;
-    }
-    return coord;
-  }
-*/
-  /*
-  checkForHead(snakeHeads: Array<Coord>): boolean {
-    return Boolean(
-      snakeHeads.find((currentCoord: Coord) =>
-        coordEq(this.coord, currentCoord),
-      ),
-    );
-  }
-  */
 
   checkForFood(gameState: GameState): boolean {
     return Boolean(
@@ -78,42 +49,21 @@ export class SafeCoord {
     let newRating: number = this.adjacentSafeCoords + 1;
     
     writeToLog(debugLogStream, `MOVE ${gameState.turn}: newRating1: ${JSON.stringify(newRating, null, 2)}`);
+
     if (this.hasFood) {
       newRating += 25;
     }
     newRating += this.chanceToKill;
+
     writeToLog(debugLogStream, `MOVE ${gameState.turn}: newRating2: ${JSON.stringify(newRating, null, 2)}`);
+
     return newRating;
   }
 
   determineKillChance(gameState: GameState, currentCoord: Coord): number {
     let killChance = 0;
     const firstGradeNeighbors: Coord[] = getNeighbors(currentCoord, gameState.board);
-    /*UNFINISHED: const secondGradeNeighbors: Coord[] = getNeighbors(currentCoord).map(
-      (neighbor) => 
-      getNeighbors(neighbor)).reduce((accumulator, currentValue) => { 
-        if (accumulator.find((current) => 
-        coordEq(current, neighbor)){return accumulator}
-        return [...currentNeighbor, ...accumulator])), [])));
 
-    //UNFINISHED const secondGradeNeighbors: Coord[] = getNeighbors(currentCoord).map(
-      (neighbor) => 
-      getNeighbors(neighbor)).reduce((accumulator, currentValue) => { 
-        return [...accumulator, ...currentValue];
-      }, []).filter((neighbor) =>
-        !coordEq(neighbor, currentCoord))
-
-    const secondGradeNeighbors: Coord[] = firstGradeNeighbors.flatMap(
-      (neighbor) => getNeighbors(neighbor));
-
-    const secondGradeNeighbors: Coord[] = Array.from(
-      new Set(
-        getNeighbors(currentCoord)
-          .flatMap((neighbor) => getNeighbors(neighbor))
-          .filter((neighbor) => !coordEq(neighbor, currentCoord))
-      )
-    );
-*/
     let secondGradeNeighbors = firstGradeNeighbors.
       flatMap((neighbor) => 
       getNeighbors(neighbor, gameState.board));
