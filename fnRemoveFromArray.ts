@@ -7,12 +7,12 @@ import {
   writeToLog,
 } from "./fnLogging.js";
 
-export function removeDuplicates(coords: Coord[]): Coord[] {
-   let accumulator: Array<Coord> = [coords[0]];
-   for ( let j = 1; j < coords.length; j++) {
+export function removeDuplicates(array: Array<Coord>): Array<Coord> {
+   let accumulator: Array<Coord> = [array[0]];
+   for ( let j = 1; j < array.length; j++) {
     let duplicateFound = false;
     for (let i = 0; i < accumulator.length; i++) {
-        if (coordEq(accumulator[i], coords[j])){
+        if (coordEq(accumulator[i], array[j])){
           duplicateFound = true;
           break;
         }
@@ -23,8 +23,15 @@ export function removeDuplicates(coords: Coord[]): Coord[] {
         */
     }
     if (!duplicateFound) {
-      accumulator.push(coords[j]);
+      accumulator.push(array[j]);
     }
    }
 return accumulator;
+}
+
+export function removeElements(array: Array<Coord>, removeElements: Array<Coord>): Array<Coord> {
+  const result: Coord[] = array.filter(item => !removeElements.some(removeItem =>
+    coordEq(removeItem, item)
+  ));
+  return result;
 }
