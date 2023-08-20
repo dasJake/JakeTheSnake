@@ -90,7 +90,7 @@ export class SafeDestination {
     let biggerHeads = findSnakeheads(gameState, "bigger");
     writeToLog(debugLogStream, `MOVE ${gameState.turn}: biggerHeadsWithMine: ${JSON.stringify({biggerHeads}, null, 2)}`);
     let remove: Coord[] = [gameState.you.head];
-    removeElements(biggerHeads, remove);
+    biggerHeads = removeElements(biggerHeads, remove);
     writeToLog(debugLogStream, `MOVE ${gameState.turn}: biggerHeadsWithoutMine: ${JSON.stringify({biggerHeads}, null, 2)}`);
 
     biggerHeads.forEach((head) => {

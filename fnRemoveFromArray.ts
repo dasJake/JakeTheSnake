@@ -29,8 +29,8 @@ export function removeDuplicates(array: Array<Coord>): Array<Coord> {
 return accumulator;
 }
 
-export function removeElements(array: Array<Coord>, removeElements: Array<Coord>): Array<Coord> {
-  const result: Coord[] = array.filter(item => !removeElements.some(removeItem =>
+export function removeElements(array: Array<Coord>, toBeRemoved: Array<Coord>): Array<Coord> {
+  const result: Coord[] = array.filter(item => !toBeRemoved.some(removeItem =>
     coordEq(removeItem, item)
   ));
   return result;

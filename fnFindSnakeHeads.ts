@@ -24,7 +24,7 @@ export function findSnakeheads(gameState: GameState, marker?: string): Coord[] {
     if (marker === "bigger") {
         let biggerHeads: Array<Coord> = [];
         gameState.board.snakes.forEach((snake) => {
-            if (snake.length > gameState.you.length) {
+            if (snake.length >= gameState.you.length) {
                 biggerHeads.push(snake.head);
             }
         });
