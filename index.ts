@@ -20,10 +20,10 @@ import {
   Move,
   MoveResponse,
 } from "./types.js";
-import { SafeCoord, SafeCoords } from "./classSafeCoord.js";
+import { SafeDestination, SafeDestinations } from "./classSafeDestination.js";
 import { getNeighbors } from "./fnGetNeighbors.js";
 import * as fs from "fs";
-import { determineSafeCoords } from "./fnDetermineSafCoords.js";
+import { determineSafeDestinations } from "./fnDetermineSafeDestinations.js";
 import {
   gameLog,
   gameLogStream,
@@ -96,15 +96,15 @@ function move(gameState: GameState): MoveResponse {
   }
 
   // determine safe coordinates
-  const safeCoords = determineSafeCoords(
+  const safeDestinations = determineSafeDestinations(
     safeNeighbors,
     gameState.board,
     gameState,
   );
 
   // Choose move according to rating
-  const highestRatedCoords: SafeCoord[] = safeCoords.filter(coord =>
-    coord.rating === Math.max(...safeCoords.map(c => c.rating))
+  const highestRatedCoords: SafeDestination[] = safeDestinations.filter(coord =>
+    coord.rating === Math.max(...safeDestinations.map(c => c.rating))
   );
   if (highestRatedCoords.length === 1) {
   const nextMove: Move = highestRatedCoords[0].moveToCoord;

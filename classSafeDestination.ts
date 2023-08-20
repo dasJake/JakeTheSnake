@@ -1,7 +1,7 @@
 import { GameState, Board, Coord, coordEq, Move } from "./types.js";
 import {
-  removeDuplicates,
-} from "./fnRemoveDuplicates.js";
+  removeDuplicates, removeElements,
+} from "./fnRemoveFromArray.js";
 import { findSnakeheads } from "./fnFindSnakeHeads.js";
 import { getNeighbors } from "./fnGetNeighbors.js";
 import { getMoveToCoordinate } from "./fnGetMoveToCoordinate.js";
@@ -14,12 +14,12 @@ import {
   writeToLog,
 } from "./fnLogging.js";
 
-export class SafeCoord {
+export class SafeDestination {
   moveToCoord: Move;
   coord: Coord;
   rating: number;
   hasFood: boolean;
-  adjacentSafeCoords: number;
+  safeAreaSize: number;
   chanceToKill: number;
   riskToBeKilled: number;
 
@@ -33,8 +33,8 @@ export class SafeCoord {
     this.hasFood = this.checkForFood(gameState);
     writeToLog(debugLogStream, `MOVE ${gameState.turn}: head: ${JSON.stringify(gameState.you.head, null, 2)}`);
     writeToLog(debugLogStream, `MOVE ${gameState.turn}: Coord: ${JSON.stringify(this.coord, null, 2)}`);
-    this.adjacentSafeCoords = floodFill([this.coord], 0, board, gameState).length;
-    writeToLog(debugLogStream, `MOVE ${gameState.turn}: area: ${JSON.stringify(this.adjacentSafeCoords, null, 2)}`);
+    this.safeAreaSize = floodFill([this.coord], 0, board, gameState).length;
+    writeToLog(debugLogStream, `MOVE ${gameState.turn}: area: ${JSON.stringify(this.safeAreaSize, null, 2)}`);
     this.chanceToKill = this.determineKillChance(gameState, this.coord);
     this.riskToBeKilled = this.determineRiskToKilled();
     this.rating = this.setRating(gameState);
@@ -48,7 +48,7 @@ export class SafeCoord {
   }
 
   setRating(gameState: GameState): number {
-    let newRating: number = this.adjacentSafeCoords + 1;
+    let newRating: number = this.safeAreaSize + 1;
     
     writeToLog(debugLogStream, `MOVE ${gameState.turn}: newRating1: ${JSON.stringify(newRating, null, 2)}`);
 
@@ -88,7 +88,10 @@ export class SafeCoord {
       }
     });
     let biggerHeads = findSnakeheads(gameState, "bigger");
-    writeToLog(debugLogStream, `MOVE ${gameState.turn}: biggerHeads: ${JSON.stringify({biggerHeads}, null, 2)}`);
+    writeToLog(debugLogStream, `MOVE ${gameState.turn}: biggerHeadsWithMine: ${JSON.stringify({biggerHeads}, null, 2)}`);
+    let remove: Coord[] = [gameState.you.head];
+    removeElements(biggerHeads, remove);
+    writeToLog(debugLogStream, `MOVE ${gameState.turn}: biggerHeadsWithoutMine: ${JSON.stringify({biggerHeads}, null, 2)}`);
 
     biggerHeads.forEach((head) => {
       if (firstGradeNeighbors.find((currentNeighbor: Coord) =>
@@ -116,4 +119,4 @@ export class SafeCoord {
   }
 }
 
-export type SafeCoords = SafeCoord[];
+export type SafeDestinations = SafeDestination[];
