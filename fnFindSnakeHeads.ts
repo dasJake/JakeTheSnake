@@ -8,6 +8,7 @@ import {
   debugLogStream,
   writeToLog,
 } from "./fnLogging.js";
+import { removeElements } from "./fnRemoveFromArray.js";
 
 export function findSnakeheads(gameState: GameState, marker?: string): Coord[] {
     
@@ -21,14 +22,15 @@ export function findSnakeheads(gameState: GameState, marker?: string): Coord[] {
         return smallerHeads;
     }
 
-    if (marker === "bigger") {
-        let biggerHeads: Array<Coord> = [];
+    if (marker === "deadly") {
+        let deadlyHeads: Array<Coord> = [];
         gameState.board.snakes.forEach((snake) => {
             if (snake.length >= gameState.you.length) {
-                biggerHeads.push(snake.head);
+                deadlyHeads.push(snake.head);
             }
         });
-        return biggerHeads;
+        deadlyHeads = removeElements(deadlyHeads, [gameState.you.head]);
+        return deadlyHeads;
     }
 
     let heads: Array<Coord> = [];

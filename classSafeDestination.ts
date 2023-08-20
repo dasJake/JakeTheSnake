@@ -87,19 +87,16 @@ export class SafeDestination {
         killChance += 25;
       }
     });
-    let biggerHeads = findSnakeheads(gameState, "bigger");
-    writeToLog(debugLogStream, `MOVE ${gameState.turn}: biggerHeadsWithMine: ${JSON.stringify({biggerHeads}, null, 2)}`);
-    let remove: Coord[] = [gameState.you.head];
-    biggerHeads = removeElements(biggerHeads, remove);
-    writeToLog(debugLogStream, `MOVE ${gameState.turn}: biggerHeadsWithoutMine: ${JSON.stringify({biggerHeads}, null, 2)}`);
+    let deadlyHeads = findSnakeheads(gameState, "deadly");
+    writeToLog(debugLogStream, `MOVE ${gameState.turn}: deadlyHeads: ${JSON.stringify({deadlyHeads}, null, 2)}`);
 
-    biggerHeads.forEach((head) => {
+    deadlyHeads.forEach((head) => {
       if (firstGradeNeighbors.find((currentNeighbor: Coord) =>
       coordEq(head, currentNeighbor))) {
         killChance -= 70;
       }
     });
-    biggerHeads.forEach((head) => {
+    deadlyHeads.forEach((head) => {
       if (secondGradeNeighbors.find((currentNeighbor: Coord) =>
       coordEq(head, currentNeighbor))) {
         killChance -= 40;
