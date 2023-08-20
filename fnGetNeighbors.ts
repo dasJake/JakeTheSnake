@@ -34,3 +34,22 @@ export function getNeighbors(currentCoord: Coord, board: Board, safe?: SafeMarke
 
   return neighborsInBounds;
 }
+
+
+export function findNeighbors (
+  origin: Array<Coord>,
+  board: Board,
+  recursionDepth: number,
+  safe?: SafeMarker,
+  ): Array<Coord> {
+    if (recursionDepth < 1) {
+      return origin; 
+    }
+    origin = origin.flatMap((neighbor) => [
+      { ...neighbor, x: neighbor.x - 1 },
+      { ...neighbor, x: neighbor.x + 1 },
+      { ...neighbor, y: neighbor.y - 1 },
+      { ...neighbor, y: neighbor.y + 1 },
+  ]);
+    return findNeighbors(origin, board, recursionDepth - 1, safe);
+  }

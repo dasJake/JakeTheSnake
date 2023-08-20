@@ -3,7 +3,9 @@ import {
   removeDuplicates, removeElements,
 } from "./fnRemoveFromArray.js";
 import { findSnakeheads } from "./fnFindSnakeHeads.js";
-import { getNeighbors } from "./fnGetNeighbors.js";
+import { getNeighbors,
+  findNeighbors,
+} from "./fnGetNeighbors.js";
 import { getMoveToCoordinate } from "./fnGetMoveToCoordinate.js";
 import { floodFill } from "./fnFloodFill.js";
 import {
@@ -64,13 +66,23 @@ export class SafeDestination {
 
   determineKillChance(gameState: GameState, currentCoord: Coord): number {
     let killChance = 0;
-    const firstGradeNeighbors: Coord[] = getNeighbors(currentCoord, gameState.board);
+    const ersteGradeNeighbors: Coord[] = getNeighbors(currentCoord, gameState.board);
+    const firstGradeNeighbors: Coord[] = findNeighbors([currentCoord], gameState.board, 1);
 
-    let secondGradeNeighbors = firstGradeNeighbors.
+    writeToLog(debugLogStream, `MOVE ${gameState.turn}: ${JSON.stringify({ersteGradeNeighbors}, null, 2)}`);
+    writeToLog(debugLogStream, `MOVE ${gameState.turn}: ${JSON.stringify({firstGradeNeighbors}, null, 2)}`);
+
+    let zweiteGradeNeighbors = ersteGradeNeighbors.
       flatMap((neighbor) => 
       getNeighbors(neighbor, gameState.board));
+    const secondGradeNeighbors: Coord[] = findNeighbors([currentCoord], gameState.board, 2);
 
-   // writeToLog(debugLogStream, `MOVE ${gameState.turn}: 1stNeighbors: ${JSON.stringify({firstGradeNeighbors}, null, 2)}`);
+    writeToLog(debugLogStream, `MOVE ${gameState.turn}: ${JSON.stringify({zweiteGradeNeighbors}, null, 2)}`);
+    writeToLog(debugLogStream, `MOVE ${gameState.turn}: ${JSON.stringify({secondGradeNeighbors}, null, 2)}`);
+
+    const thirdGradeNeighbors: Coord[] = findNeighbors([currentCoord], gameState.board, 3);
+    writeToLog(debugLogStream, `MOVE ${gameState.turn}: ${JSON.stringify({thirdGradeNeighbors}, null, 2)}`);
+
 
     let smallerHeads = findSnakeheads(gameState, "smaller");
     //writeToLog(debugLogStream, `MOVE ${gameState.turn}: smallerHeads: ${JSON.stringify({smallerHeads}, null, 2)}`);
