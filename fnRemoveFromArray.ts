@@ -8,8 +8,8 @@ import {
 } from "./fnLogging.js";
 
 export function removeDuplicates(array: Array<Coord>): Array<Coord> {
-   let accumulator: Array<Coord> = [array[0]];
-   for ( let j = 1; j < array.length; j++) {
+   let accumulator: Array<Coord> = [];
+   for ( let j = 0; j < array.length; j++) {
     let duplicateFound = false;
     for (let i = 0; i < accumulator.length; i++) {
         if (coordEq(accumulator[i], array[j])){

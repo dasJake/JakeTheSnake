@@ -66,22 +66,23 @@ export class SafeDestination {
 
   determineKillChance(gameState: GameState, currentCoord: Coord): number {
     let killChance = 0;
+    /*
     const ersteGradeNeighbors: Coord[] = getNeighbors(currentCoord, gameState.board);
     const firstGradeNeighbors: Coord[][] = findNeighbors([[currentCoord]], gameState.board, 1);
 
-    writeToLog(debugLogStream, `MOVE ${gameState.turn}: ${JSON.stringify({ersteGradeNeighbors}, null, 2)}`);
-    writeToLog(debugLogStream, `MOVE ${gameState.turn}: ${JSON.stringify({firstGradeNeighbors}, null, 2)}`);
+    //writeToLog(debugLogStream, `MOVE ${gameState.turn}: ${JSON.stringify({ersteGradeNeighbors}, null, 2)}`);
+    //writeToLog(debugLogStream, `MOVE ${gameState.turn}: ${JSON.stringify({firstGradeNeighbors}, null, 2)}`);
 
     let zweiteGradeNeighbors = ersteGradeNeighbors.
       map((neighbor) => 
       getNeighbors(neighbor, gameState.board));
     const secondGradeNeighbors: Coord[][] = findNeighbors([[currentCoord]], gameState.board, 2);
 
-    writeToLog(debugLogStream, `MOVE ${gameState.turn}: ${JSON.stringify({zweiteGradeNeighbors}, null, 2)}`);
+    //writeToLog(debugLogStream, `MOVE ${gameState.turn}: ${JSON.stringify({zweiteGradeNeighbors}, null, 2)}`);
     writeToLog(debugLogStream, `MOVE ${gameState.turn}: ${JSON.stringify({secondGradeNeighbors}, null, 2)}`);
-
-    const thirdGradeNeighbors: Coord[][] = findNeighbors([[currentCoord]], gameState.board, 3);
-    writeToLog(debugLogStream, `MOVE ${gameState.turn}: ${JSON.stringify({thirdGradeNeighbors}, null, 2)}`);
+*/
+    const radar: Coord[][] = findNeighbors([[currentCoord]], gameState.board, 3, "safe");
+    writeToLog(debugLogStream, `MOVE ${gameState.turn}: ${JSON.stringify({radar}, null, 2)}`);
 
 
     let smallerHeads = findSnakeheads(gameState, "smaller");

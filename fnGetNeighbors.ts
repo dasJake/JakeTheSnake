@@ -46,12 +46,14 @@ export function findNeighbors (
       return origin;
     }
     const newNeighors = [...origin,
-      removeDuplicates(
-        origin.flatMap((neighborGroup) =>
-          neighborGroup.flatMap((neighbor) =>
-            getNeighbors(neighbor, board, safe)
+      removeElements(
+        removeDuplicates(
+          origin.flatMap((neighborGroup) =>
+            neighborGroup.flatMap((neighbor) =>
+              getNeighbors(neighbor, board, safe)
+            )
           )
-        )
+        ), origin.flat()
       )
     ];
     
