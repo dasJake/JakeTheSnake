@@ -9,6 +9,7 @@ import {
   MoveResponse,
 } from "./types.js";
 import { isCoordInBounds, isCoordSafe } from "./fnIsCoordSafe.js";
+import { removeDuplicates, removeElements } from "./fnRemoveFromArray.js";
 
 export function getNeighbors(currentCoord: Coord, board: Board, safe?: SafeMarker): Coord[] {
   const neighbors = [
@@ -35,21 +36,24 @@ export function getNeighbors(currentCoord: Coord, board: Board, safe?: SafeMarke
   return neighborsInBounds;
 }
 
-
 export function findNeighbors (
-  origin: Array<Coord>,
+  origin: Array<Array<Coord>>,
   board: Board,
   recursionDepth: number,
   safe?: SafeMarker,
-  ): Array<Coord> {
+  ): Array<Array<Coord>> {
     if (recursionDepth < 1) {
-      return origin; 
+      return origin;
     }
-    origin = origin.flatMap((neighbor) => [
-      { ...neighbor, x: neighbor.x - 1 },
-      { ...neighbor, x: neighbor.x + 1 },
-      { ...neighbor, y: neighbor.y - 1 },
-      { ...neighbor, y: neighbor.y + 1 },
-  ]);
-    return findNeighbors(origin, board, recursionDepth - 1, safe);
+    const newNeighors = [...origin,
+      removeDuplicates(
+        origin.flatMap((neighborGroup) =>
+          neighborGroup.flatMap((neighbor) =>
+            getNeighbors(neighbor, board, safe)
+          )
+        )
+      )
+    ];
+    
+    return findNeighbors(newNeighors, board, recursionDepth - 1, safe);
   }

@@ -67,26 +67,26 @@ export class SafeDestination {
   determineKillChance(gameState: GameState, currentCoord: Coord): number {
     let killChance = 0;
     const ersteGradeNeighbors: Coord[] = getNeighbors(currentCoord, gameState.board);
-    const firstGradeNeighbors: Coord[] = findNeighbors([currentCoord], gameState.board, 1);
+    const firstGradeNeighbors: Coord[][] = findNeighbors([[currentCoord]], gameState.board, 1);
 
     writeToLog(debugLogStream, `MOVE ${gameState.turn}: ${JSON.stringify({ersteGradeNeighbors}, null, 2)}`);
     writeToLog(debugLogStream, `MOVE ${gameState.turn}: ${JSON.stringify({firstGradeNeighbors}, null, 2)}`);
 
     let zweiteGradeNeighbors = ersteGradeNeighbors.
-      flatMap((neighbor) => 
+      map((neighbor) => 
       getNeighbors(neighbor, gameState.board));
-    const secondGradeNeighbors: Coord[] = findNeighbors([currentCoord], gameState.board, 2);
+    const secondGradeNeighbors: Coord[][] = findNeighbors([[currentCoord]], gameState.board, 2);
 
     writeToLog(debugLogStream, `MOVE ${gameState.turn}: ${JSON.stringify({zweiteGradeNeighbors}, null, 2)}`);
     writeToLog(debugLogStream, `MOVE ${gameState.turn}: ${JSON.stringify({secondGradeNeighbors}, null, 2)}`);
 
-    const thirdGradeNeighbors: Coord[] = findNeighbors([currentCoord], gameState.board, 3);
+    const thirdGradeNeighbors: Coord[][] = findNeighbors([[currentCoord]], gameState.board, 3);
     writeToLog(debugLogStream, `MOVE ${gameState.turn}: ${JSON.stringify({thirdGradeNeighbors}, null, 2)}`);
 
 
     let smallerHeads = findSnakeheads(gameState, "smaller");
     //writeToLog(debugLogStream, `MOVE ${gameState.turn}: smallerHeads: ${JSON.stringify({smallerHeads}, null, 2)}`);
-
+/*
     smallerHeads.forEach((head) => {
       if (firstGradeNeighbors.find((currentNeighbor: Coord) =>
       coordEq(head, currentNeighbor))) {
@@ -118,7 +118,7 @@ export class SafeDestination {
     //writeToLog(debugLogStream, `MOVE ${gameState.turn}: 2ndNeighbors: ${JSON.stringify({secondGradeNeighbors}, null, 2)}`);
 
     let uniqueSecondNeighbors = removeDuplicates(secondGradeNeighbors);
-
+*/
     //writeToLog(debugLogStream, `MOVE ${gameState.turn}: uniqNeighbors: ${JSON.stringify({uniqueSecondNeighbors}, null, 2)}`);
     return killChance;
   }
