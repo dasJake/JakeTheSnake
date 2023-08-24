@@ -15,6 +15,7 @@ import {
   debugLogStream,
   writeToLog,
 } from "./fnLogging.js";
+import { rateCoords } from "./fnRateCoords.js";
 
 export class SafeDestination {
   moveToCoord: Move;
@@ -83,6 +84,8 @@ export class SafeDestination {
 
 
     let smallerHeads = findSnakeheads(gameState, "smaller");
+    const smallHeadsRating = rateCoords (radar, smallerHeads, 0.3);
+    /*
     writeToLog(debugLogStream, `MOVE ${gameState.turn}: smallerHeads: ${JSON.stringify({smallerHeads}, null, 2)}`);
     for ( var i = 0; i < radar.length; i++) {
       let rowRating = 0;
@@ -96,6 +99,7 @@ export class SafeDestination {
 
 
     }
+    */
 /*
     smallerHeads.forEach((head) => {
       if (firstGradeNeighbors.find((currentNeighbor: Coord) =>
