@@ -72,6 +72,7 @@ export class SafeDestination {
 
     //writeToLog(debugLogStream, `MOVE ${gameState.turn}: ${JSON.stringify({ersteGradeNeighbors}, null, 2)}`);
     //writeToLog(debugLogStream, `MOVE ${gameState.turn}: ${JSON.stringify({firstGradeNeighbors}, null, 2)}`);
+    
     let zweiteGradeNeighbors = ersteGradeNeighbors.
       flatMap((neighbor) => 
       getNeighbors(neighbor, gameState.board));
@@ -80,11 +81,13 @@ export class SafeDestination {
     //writeToLog(debugLogStream, `MOVE ${gameState.turn}: ${JSON.stringify({zweiteGradeNeighbors}, null, 2)}`);
     //writeToLog(debugLogStream, `MOVE ${gameState.turn}: ${JSON.stringify({secondGradeNeighbors}, null, 2)}`);
     const radar: Coord[][] = findNeighbors([[currentCoord]], gameState.board, 3, );
-    writeToLog(debugLogStream, `MOVE ${gameState.turn}: ${JSON.stringify({radar}, null, 2)}`);
+    //writeToLog(debugLogStream, `MOVE ${gameState.turn}: ${JSON.stringify({radar}, null, 2)}`);
 
 
     let smallerHeads = findSnakeheads(gameState, "smaller");
-    const smallHeadsRating = rateCoords (radar, smallerHeads, 0.3);
+    const smallHeadsRating = rateCoords (radar, smallerHeads, 30);
+    killChance += smallHeadsRating;
+    
     /*
     writeToLog(debugLogStream, `MOVE ${gameState.turn}: smallerHeads: ${JSON.stringify({smallerHeads}, null, 2)}`);
     for ( var i = 0; i < radar.length; i++) {
@@ -115,7 +118,7 @@ export class SafeDestination {
     });
     */
     let deadlyHeads = findSnakeheads(gameState, "deadly");
-    writeToLog(debugLogStream, `MOVE ${gameState.turn}: deadlyHeads: ${JSON.stringify({deadlyHeads}, null, 2)}`);
+    //writeToLog(debugLogStream, `MOVE ${gameState.turn}: deadlyHeads: ${JSON.stringify({deadlyHeads}, null, 2)}`);
 
     deadlyHeads.forEach((head) => {
       if (ersteGradeNeighbors.find((currentNeighbor: Coord) =>
@@ -134,6 +137,7 @@ export class SafeDestination {
 
     //let uniqueSecondNeighbors = removeDuplicates(secondGradeNeighbors);
     //writeToLog(debugLogStream, `MOVE ${gameState.turn}: uniqNeighbors: ${JSON.stringify({uniqueSecondNeighbors}, null, 2)}`);
+    writeToLog(debugLogStream, `MOVE ${gameState.turn}: killChance: ${JSON.stringify(killChance, null, 2)}`);
     return killChance;
   }
 

@@ -15,9 +15,9 @@ export function rateCoords (radar: Array<Array<Coord>>, lookup: Array<Coord>, lo
         //rowcount => rowrating
         const rowCount: number = countMatchesInRow(radar[radarDepth], lookup);
         const rowRating: number = rowCount * lookupElementScore * (1/radarDepth);
-        rating =+ rowRating;
-    writeToLog(debugLogStream, `rowRating: ${JSON.stringify({rowRating}, null, 2)}`);
-    writeToLog(debugLogStream, `Rating: ${JSON.stringify({rating}, null, 2)}`);
+        rating += rowRating;
+    writeToLog(debugLogStream, `rowRating: ${JSON.stringify(rowRating, null, 2)}`);
+    writeToLog(debugLogStream, `Rating: ${JSON.stringify(rating, null, 2)}`);
     }
    //add ratings 
 return rating;
