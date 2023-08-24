@@ -25,6 +25,7 @@ export class SafeDestination {
   safeAreaSize: number;
   chanceToKill: number;
   riskToBeKilled: number;
+  foodRadar: number;
 
   constructor(
     currentNeighbor: Coord,
@@ -40,6 +41,7 @@ export class SafeDestination {
     writeToLog(debugLogStream, `MOVE ${gameState.turn}: area: ${JSON.stringify(this.safeAreaSize, null, 2)}`);
     this.chanceToKill = this.determineKillChance(gameState, this.coord);
     this.riskToBeKilled = this.determineRiskToKilled(gameState, this.coord);
+    this.foodRadar = this.determineFoodRadar(gameState, this.coord);
     this.rating = this.setRating(gameState);
     writeToLog(debugLogStream, `MOVE ${gameState.turn}: rating: ${JSON.stringify(this.rating, null, 2)}`);
   }
@@ -53,20 +55,33 @@ export class SafeDestination {
   setRating(gameState: GameState): number {
     let newRating: number = this.safeAreaSize + 1;
     
-    writeToLog(debugLogStream, `MOVE ${gameState.turn}: newRating1: ${JSON.stringify(newRating, null, 2)}`);
+    writeToLog(debugLogStream, `MOVE ${gameState.turn}: newRatingArea: ${JSON.stringify(newRating, null, 2)}`);
 
+    newRating += this.foodRadar;
+
+    writeToLog(debugLogStream, `MOVE ${gameState.turn}: newRatingFood: ${JSON.stringify(newRating, null, 2)}`);
+    /*
     if (this.hasFood) {
       newRating += 25;
     }
+    */
     newRating += this.chanceToKill;
 
-    writeToLog(debugLogStream, `MOVE ${gameState.turn}: newRating2: ${JSON.stringify(newRating, null, 2)}`);
+    writeToLog(debugLogStream, `MOVE ${gameState.turn}: newRatingKill: ${JSON.stringify(newRating, null, 2)}`);
 
     newRating -= this.riskToBeKilled;
 
-    writeToLog(debugLogStream, `MOVE ${gameState.turn}: newRating3: ${JSON.stringify(newRating, null, 2)}`);
+    writeToLog(debugLogStream, `MOVE ${gameState.turn}: newRatingDeath: ${JSON.stringify(newRating, null, 2)}`);
 
     return newRating;
+  }
+
+  determineFoodRadar(gameState: GameState, currentCoord: Coord): number {
+    let foodRadar = 0;
+    const radar: Coord[][] = findNeighbors([[currentCoord]], gameState.board, 10, );
+    const foodRating = rateCoords (radar, gameState.board.food, 25);
+    foodRadar += foodRating;
+  return foodRadar;
   }
 
   determineKillChance(gameState: GameState, currentCoord: Coord): number {
