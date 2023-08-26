@@ -77,14 +77,20 @@ export class SafeDestination {
   }
 
   determineFoodRadar(gameState: GameState, currentCoord: Coord): number {
+    writeToLog(debugLogStream, `Food==========`);
     let foodRadar = 0;
+    if (this.hasFood) {
+      foodRadar += 25;
+    }
     const radar: Coord[][] = findNeighbors([[currentCoord]], gameState.board, 10, );
     const foodRating = rateCoords (radar, gameState.board.food, 25);
     foodRadar += foodRating;
+    writeToLog(debugLogStream, `MOVE ${gameState.turn}: FoodRadar: ${JSON.stringify(foodRadar, null, 2)}`);
   return foodRadar;
   }
 
   determineKillChance(gameState: GameState, currentCoord: Coord): number {
+    writeToLog(debugLogStream, `Kill==========`);
     let killChance = 0;
     const ersteGradeNeighbors: Coord[] = getNeighbors(currentCoord, gameState.board);
     //const firstGradeNeighbors: Coord[][] = findNeighbors([[currentCoord]], gameState.board, 1);
@@ -161,11 +167,13 @@ export class SafeDestination {
   }
 
   determineRiskToKilled(gameState: GameState, currentCoord: Coord): number {
+    writeToLog(debugLogStream, `DeathRisk====`);
     let riskToBeKilled = 0;
-    const radar: Coord[][] = findNeighbors([[currentCoord]], gameState.board, 3, );
+    const radar: Coord[][] = findNeighbors([[currentCoord]], gameState.board, 2, );
     const deadlyHeads = findSnakeheads(gameState, "deadly");
     const smallHeadsRating = rateCoords (radar, deadlyHeads, -60);
     riskToBeKilled -= smallHeadsRating;
+    writeToLog(debugLogStream, `MOVE ${gameState.turn}: DeathRisk: ${JSON.stringify(riskToBeKilled, null, 2)}`);
   return riskToBeKilled;
   }
 }
