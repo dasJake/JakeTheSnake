@@ -1,4 +1,4 @@
-import { Config, Game, GameState, SnakeSizeFlag } from "./types";
+import { Config, coordEq, Game, GameState, SnakeSizeFlag } from "./types.js";
 
 function baseConfig(): Config {
     return {
@@ -25,8 +25,8 @@ function numberOfSnakes(gameState: GameState, snakeSize: SnakeSizeFlag): number 
 
     if (snakeSize === "deadly") {
         const deadlySnakeCount = gameState.board.snakes.reduce(
-            (acc, snake, myLength) =>
-            (snake.length > gameState.you.length ? acc+1 : acc)
+            (acc, snake) =>
+            (snake.length >= gameState.you.length && !coordEq(snake.head, gameState.you.head) ? acc+1 : acc)
             , 0
         );
         return deadlySnakeCount;
@@ -34,7 +34,7 @@ function numberOfSnakes(gameState: GameState, snakeSize: SnakeSizeFlag): number 
 
     if (snakeSize === "smaller") {
         const smallerSnakeCount = gameState.board.snakes.reduce(
-            (acc, snake, myLength) =>
+            (acc, snake) =>
             (snake.length < gameState.you.length ? acc+1 : acc)
             , 0
         );
