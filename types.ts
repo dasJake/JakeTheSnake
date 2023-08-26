@@ -84,6 +84,8 @@ export interface MoveResponse {
 
 export type SafeMarker = "safe";
 
+export type SnakeSizeFlag = "smaller" | "deadly";
+
 export interface Config {
   foodScore: number;
   killScore: number;

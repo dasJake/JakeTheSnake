@@ -1,5 +1,6 @@
 import { GameState,
     Coord,
+    SnakeSizeFlag,
 } from "./types.js";
 import {
   gameLog,
@@ -10,7 +11,7 @@ import {
 } from "./fnLogging.js";
 import { removeElements } from "./fnRemoveFromArray.js";
 
-export function findSnakeheads(gameState: GameState, marker?: string): Coord[] {
+export function findSnakeheads(gameState: GameState, marker?: SnakeSizeFlag): Coord[] {
     
     if (marker === "smaller") {
         let smallerHeads: Array<Coord> = [];
