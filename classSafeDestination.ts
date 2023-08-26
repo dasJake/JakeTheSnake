@@ -83,10 +83,10 @@ export class SafeDestination {
     writeToLog(debugLogStream, `Food==========`);
     let foodRadar = 0;
     if (this.hasFood) {
-      foodRadar += 25;
+      foodRadar += this.config.foodScore;
     }
-    const radar: Coord[][] = findNeighbors([[currentCoord]], gameState.board, this.config.foodScore, );
-    const foodRating = rateCoords (radar, gameState.board.food, 25);
+    const radar: Coord[][] = findNeighbors([[currentCoord]], gameState.board, 10, );
+    const foodRating = rateCoords (radar, gameState.board.food, this.config.foodScore);
     foodRadar += foodRating;
     writeToLog(debugLogStream, `MOVE ${gameState.turn}: FoodRadar: ${JSON.stringify(foodRadar, null, 2)}`);
   return foodRadar;

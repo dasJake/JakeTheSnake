@@ -1,4 +1,4 @@
-import { Config, GameState } from "./types";
+import { Config, Game, GameState, SnakeSizeFlag } from "./types";
 
 function baseConfig(): Config {
     return {
@@ -10,5 +10,36 @@ function baseConfig(): Config {
 
 export function getTurnConfig(gameState: GameState): Config {
     const config = baseConfig();
+
+    //if I am not alone
+    if (gameState.board.snakes.length > 1) {
+        if (numberOfSnakes(gameState, "deadly") === 0) {
+            config.foodScore = 0;
+        }
+    }
     return config;
+}
+
+function numberOfSnakes(gameState: GameState, snakeSize: SnakeSizeFlag): number {
+    const snakeCount = gameState.board.snakes.length;
+
+    if (snakeSize === "deadly") {
+        const deadlySnakeCount = gameState.board.snakes.reduce(
+            (acc, snake, myLength) =>
+            (snake.length > gameState.you.length ? acc+1 : acc)
+            , 0
+        );
+        return deadlySnakeCount;
+    }
+
+    if (snakeSize === "smaller") {
+        const smallerSnakeCount = gameState.board.snakes.reduce(
+            (acc, snake, myLength) =>
+            (snake.length < gameState.you.length ? acc+1 : acc)
+            , 0
+        );
+        return smallerSnakeCount;
+
+    }
+    return snakeCount;
 }
