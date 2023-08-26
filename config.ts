@@ -3,8 +3,11 @@ import { Config, coordEq, Game, GameState, SnakeSizeFlag } from "./types.js";
 function baseConfig(): Config {
     return {
         foodScore: 30,
+        foodRadarDepth: 10,
         killScore: 20,
+        killRadarDepth: 5,
         deathScore: -60,
+        deathRadarDepth: 1,
     };
 } 
 
@@ -15,6 +18,7 @@ export function getTurnConfig(gameState: GameState): Config {
     if (gameState.board.snakes.length > 1) {
         if (numberOfSnakes(gameState, "deadly") === 0) {
             config.foodScore = 0;
+            config.killRadarDepth = 25;
         }
     }
     return config;

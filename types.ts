@@ -88,6 +88,9 @@ export type SnakeSizeFlag = "smaller" | "deadly";
 
 export interface Config {
   foodScore: number;
+  foodRadarDepth: number;
   killScore: number;
+  killRadarDepth: number;
   deathScore: number;
+  deathRadarDepth: number;
 }
