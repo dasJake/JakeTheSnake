@@ -1,4 +1,4 @@
-import { GameState, Board, Coord, coordEq, Move } from "./types.js";
+import { Config, GameState, Board, Coord, coordEq, Move } from "./types.js";
 import {
   removeDuplicates, removeElements,
 } from "./fnRemoveFromArray.js";
@@ -16,6 +16,7 @@ import {
   writeToLog,
 } from "./fnLogging.js";
 import { rateCoords } from "./fnRateCoords.js";
+import { getTurnConfig } from "./config.js";
 
 export class SafeDestination {
   moveToCoord: Move;
@@ -26,6 +27,7 @@ export class SafeDestination {
   chanceToKill: number;
   riskToBeKilled: number;
   foodRadar: number;
+  config: Config;
 
   constructor(
     currentNeighbor: Coord,
@@ -39,6 +41,7 @@ export class SafeDestination {
     writeToLog(debugLogStream, `MOVE ${gameState.turn}: Coord: ${JSON.stringify(this.coord, null, 2)}`);
     this.safeAreaSize = floodFill([this.coord], 0, board, gameState).length;
     writeToLog(debugLogStream, `MOVE ${gameState.turn}: area: ${JSON.stringify(this.safeAreaSize, null, 2)}`);
+    this.config = getTurnConfig(gameState);
     this.chanceToKill = this.determineKillChance(gameState, this.coord);
     this.riskToBeKilled = this.determineRiskToKilled(gameState, this.coord);
     this.foodRadar = this.determineFoodRadar(gameState, this.coord);
@@ -82,7 +85,7 @@ export class SafeDestination {
     if (this.hasFood) {
       foodRadar += 25;
     }
-    const radar: Coord[][] = findNeighbors([[currentCoord]], gameState.board, 10, );
+    const radar: Coord[][] = findNeighbors([[currentCoord]], gameState.board, this.config.foodScore, );
     const foodRating = rateCoords (radar, gameState.board.food, 25);
     foodRadar += foodRating;
     writeToLog(debugLogStream, `MOVE ${gameState.turn}: FoodRadar: ${JSON.stringify(foodRadar, null, 2)}`);
@@ -110,7 +113,7 @@ export class SafeDestination {
 
 
     let smallerHeads = findSnakeheads(gameState, "smaller");
-    const smallHeadsRating = rateCoords (radar, smallerHeads, 30);
+    const smallHeadsRating = rateCoords (radar, smallerHeads, this.config.killScore);
     killChance += smallHeadsRating;
     
     /*
@@ -171,7 +174,7 @@ export class SafeDestination {
     let riskToBeKilled = 0;
     const radar: Coord[][] = findNeighbors([[currentCoord]], gameState.board, 2, );
     const deadlyHeads = findSnakeheads(gameState, "deadly");
-    const smallHeadsRating = rateCoords (radar, deadlyHeads, -60);
+    const smallHeadsRating = rateCoords (radar, deadlyHeads, this.config.deathScore);
     riskToBeKilled -= smallHeadsRating;
     writeToLog(debugLogStream, `MOVE ${gameState.turn}: DeathRisk: ${JSON.stringify(riskToBeKilled, null, 2)}`);
   return riskToBeKilled;

@@ -83,3 +83,9 @@ export interface MoveResponse {
 }
 
 export type SafeMarker = "safe";
+
+export interface Config {
+  foodScore: number;
+  killScore: number;
+  deathScore: number;
+}
