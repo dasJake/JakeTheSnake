@@ -7,14 +7,30 @@ import {
   writeToLog,
 } from "./fnLogging.js";
 
-export function rateCoords (radar: Array<Array<Coord>>, lookup: Array<Coord>, lookupElementScore: number): number {
+export function rateCoords (
+    radar: Array<Array<Coord>>,
+    lookup: Array<Coord>,
+    lookupElementScore: number,
+    radarStartOffset: number,
+    maxRadarDepth: number,
+    ): number {
     let rating: number = 0;
 
    //count occurances for each row
-    for ( var radarDepth = 1; radarDepth < radar.length; radarDepth++) { //start at i=1 because radar[0] must be ignored
+   /*with radarStartOffset and maxRadarDepth it can be specified what radar field should be analyzed
+   radar[0] contains only the Coord itself (not a neigbor)
+   food should be evaltuated starting from radar[0];
+   everything else from radar[1]*/
+    for ( var radarDepth = 0 + radarStartOffset; radarDepth < maxRadarDepth; radarDepth++) {
         //rowcount => rowrating
         const rowCount: number = countMatchesInRow(radar[radarDepth], lookup);
-        const rowRating: number = rowCount * lookupElementScore * (1/radarDepth);
+        let divisor: number = radarDepth;
+
+        //hackjob to avoid divide by 0 error when offset 0
+        if (radarStartOffset === 0) {
+            divisor = radarDepth + 1;
+        }
+        const rowRating: number = rowCount * lookupElementScore * (1/(divisor));
         rating += rowRating;
     writeToLog(debugLogStream, `rowRating: ${JSON.stringify(rowRating, null, 2)}`);
     writeToLog(debugLogStream, `Rating: ${JSON.stringify(rating, null, 2)}`);
