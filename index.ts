@@ -32,6 +32,7 @@ import {
   writeToLog,
   resetGameLogStream,
 } from "./fnLogging.js";
+import { DEV } from "./ENV.js";
 
 // info is called when you create your Battlesnake on play.battlesnake.com
 // and controls your Battlesnake's appearance
@@ -42,9 +43,7 @@ function info(): InfoResponse {
   resetGameLogStream(); //reopen after .end()
   writeToLog(gameLogStream, "INFO");
 
-  const dev: Boolean = true;
-
-  if (dev) {
+  if (DEV) {
     return {
       apiversion: "1",
       author: "JakeTheSnake", // TODO: Your Battlesnake Username
