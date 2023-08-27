@@ -9,7 +9,7 @@ function baseConfig(): Config {
         killScore: 30,
         killRadarDepth: 4,
         deathScore: -60,
-        deathRadarDepth: 1,
+        deathRadarDepth: 2,
     };
 } 
 
@@ -24,7 +24,7 @@ export function getTurnConfig(gameState: GameState): Config {
         if (numberOfSnakes(gameState, "deadly") === 0 &&
             snakeSizeList[0] - snakeSizeList[1] >= 2) {
             config.foodScore = 5;
-            config.killRadarDepth = 25;
+            config.killRadarDepth = 15;
         }
     }
     return config;

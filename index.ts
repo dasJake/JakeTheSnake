@@ -45,9 +45,9 @@ function info(): InfoResponse {
   return {
     apiversion: "1",
     author: "JakeTheSnake", // TODO: Your Battlesnake Username
-    color: "#002bad", // TODO: Choose color
-    head: "shades", // TODO: Choose head
-    tail: "block-bum", // TODO: Choose tail
+    color: "#bd324f", // TODO: Choose color
+    head: "tiger-king", // TODO: Choose head
+    tail: "tiger-tail", // TODO: Choose tail
   };
 }
 

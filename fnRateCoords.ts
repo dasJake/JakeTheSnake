@@ -21,7 +21,7 @@ export function rateCoords (
    radar[0] contains only the Coord itself (not a neigbor)
    food should be evaltuated starting from radar[0];
    everything else from radar[1]*/
-    for ( var radarDepth = 0 + radarStartOffset; radarDepth < maxRadarDepth; radarDepth++) {
+    for ( var radarDepth = 0 + radarStartOffset; radarDepth <= maxRadarDepth; radarDepth++) {
         //rowcount => rowrating
         const rowCount: number = countMatchesInRow(radar[radarDepth], lookup);
         let divisor: number = radarDepth;
