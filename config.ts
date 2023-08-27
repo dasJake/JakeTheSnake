@@ -7,7 +7,7 @@ function baseConfig(): Config {
         foodScore: 25,
         foodRadarDepth: 10,
         killScore: 30,
-        killRadarDepth: 5,
+        killRadarDepth: 4,
         deathScore: -60,
         deathRadarDepth: 1,
     };
@@ -23,7 +23,7 @@ export function getTurnConfig(gameState: GameState): Config {
         //if I am the single longest snake and have at least 2 points size advantage
         if (numberOfSnakes(gameState, "deadly") === 0 &&
             snakeSizeList[0] - snakeSizeList[1] >= 2) {
-            config.foodScore = 0;
+            config.foodScore = 5;
             config.killRadarDepth = 25;
         }
     }
