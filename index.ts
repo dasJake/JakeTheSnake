@@ -42,13 +42,26 @@ function info(): InfoResponse {
   resetGameLogStream(); //reopen after .end()
   writeToLog(gameLogStream, "INFO");
 
-  return {
-    apiversion: "1",
-    author: "JakeTheSnake", // TODO: Your Battlesnake Username
-    color: "#bd324f", // TODO: Choose color
-    head: "tiger-king", // TODO: Choose head
-    tail: "tiger-tail", // TODO: Choose tail
-  };
+  const dev: Boolean = true;
+
+  if (dev) {
+    return {
+      apiversion: "1",
+      author: "JakeTheSnake", // TODO: Your Battlesnake Username
+      color: "#002bad", // TODO: Choose color
+      head: "shades", // TODO: Choose head
+      tail: "block-bum", // TODO: Choose tail
+    };
+  }
+  else {
+    return {
+      apiversion: "1",
+      author: "JakeTheSnake", // TODO: Your Battlesnake Username
+      color: "#bd324f", // TODO: Choose color
+      head: "tiger-king", // TODO: Choose head
+      tail: "tiger-tail", // TODO: Choose tail
+    };
+  }
 }
 
 // start is called when your Battlesnake begins a game

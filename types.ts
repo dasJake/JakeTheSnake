@@ -87,6 +87,7 @@ export type SafeMarker = "safe";
 export type SnakeSizeFlag = "smaller" | "deadly";
 
 export interface Config {
+  radarDepth: number;
   foodScore: number;
   foodRadarDepth: number;
   killScore: number;

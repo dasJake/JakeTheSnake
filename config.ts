@@ -2,8 +2,10 @@ import { Config, coordEq, Game, GameState, SnakeSizeFlag } from "./types.js";
 import { numberOfSnakes } from "./fnNumberOfSnakes.js";
 import { orderedSnakeSize } from "./fnSnakeSize.js";
 
-function baseConfig(): Config {
+function baseConfig(gameState: GameState): Config {
     return {
+        radarDepth: gameState.board.height
+            + gameState.board.width,
         foodScore: 25,
         foodRadarDepth: 10,
         killScore: 30,
@@ -14,7 +16,7 @@ function baseConfig(): Config {
 } 
 
 export function getTurnConfig(gameState: GameState): Config {
-    const config = baseConfig();
+    const config = baseConfig(gameState);
     const snakeSizeList = orderedSnakeSize(gameState);
 
     //if I am not alone
@@ -24,7 +26,7 @@ export function getTurnConfig(gameState: GameState): Config {
         if (numberOfSnakes(gameState, "deadly") === 0 &&
             snakeSizeList[0] - snakeSizeList[1] >= 2) {
             config.foodScore = 5;
-            config.killRadarDepth = 15;
+            config.killRadarDepth = config.radarDepth;
         }
     }
     return config;
