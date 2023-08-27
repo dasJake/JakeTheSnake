@@ -2,9 +2,9 @@ import { Config, coordEq, Game, GameState, SnakeSizeFlag } from "./types.js";
 
 function baseConfig(): Config {
     return {
-        foodScore: 30,
+        foodScore: 25,
         foodRadarDepth: 10,
-        killScore: 20,
+        killScore: 30,
         killRadarDepth: 5,
         deathScore: -60,
         deathRadarDepth: 1,
