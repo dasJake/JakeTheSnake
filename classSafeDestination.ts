@@ -43,7 +43,7 @@ export class SafeDestination {
     this.safeAreaSize = floodFill([this.coord], 0, board, gameState).length;
     writeToLog(debugLogStream, `MOVE ${gameState.turn}: area: ${JSON.stringify(this.safeAreaSize, null, 2)}`);
     this.config = getTurnConfig(gameState);
-    this.radar = findNeighbors([[this.coord]], gameState.board, this.config.radarDepth );
+    this.radar = findNeighbors([[this.coord]], gameState.board, this.config.radarDepth, "ignoreHeads" );
     writeToLog(debugLogStream, `MOVE ${gameState.turn}: radarDepth: ${JSON.stringify(this.radar.length, null, 2)}`);
     this.chanceToKill = this.determineKillChance(gameState, this.coord);
     this.riskToBeKilled = this.determineRiskToKilled(gameState, this.coord);

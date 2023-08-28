@@ -82,7 +82,7 @@ export interface MoveResponse {
   shout?: string;
 }
 
-export type SafeMarker = "safe";
+export type SafeMarker = "safe" | "ignoreHeads";
 
 export type SnakeSizeFlag = "smaller" | "deadly";
 

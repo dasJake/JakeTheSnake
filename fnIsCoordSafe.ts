@@ -6,9 +6,13 @@ import {
   InfoResponse,
   Move,
   MoveResponse,
+  SafeMarker,
 } from "./types.js";
 
-export function isCoordSafe(coord: Coord, board: Board): boolean {
+export function isCoordSafe(coord: Coord, board: Board, safe?: SafeMarker): boolean {
+  if (safe === "ignoreHeads") {
+    return isCoordInBounds(coord, board) && isCoordFreeIgnoreHeads(coord, board);
+  }
   return isCoordInBounds(coord, board) && isCoordFree(coord, board);
 }
 
@@ -35,6 +39,17 @@ function isCoordFree(coord: Coord, board: Board): boolean {
   if (
     board.snakes.some((snake) =>
       snake.body.slice(0, -1).find((snakeCoord) => coordEq(coord, snakeCoord)),
+    )
+  ) {
+    return false;
+  }
+  return true;
+}
+
+function isCoordFreeIgnoreHeads(coord: Coord, board: Board): boolean {
+  if (
+    board.snakes.some((snake) =>
+      snake.body.slice(1, -1).find((snakeCoord) => coordEq(coord, snakeCoord)),
     )
   ) {
     return false;

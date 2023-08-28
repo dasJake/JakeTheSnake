@@ -24,8 +24,13 @@ export function getNeighbors(currentCoord: Coord, board: Board, safe?: SafeMarke
     const safeNeigbors = neighbors.filter((neighbor) =>
       isCoordSafe(neighbor, board)
     );
-
     return safeNeigbors;
+  }
+  if (safe === "ignoreHeads") {
+    const safeNeigborsIgnoreHeads = neighbors.filter((neighbor) =>
+      isCoordSafe(neighbor, board, safe)
+    );
+    return safeNeigborsIgnoreHeads;
   }
 
   // return ALL neighbors which are within bounds of the game board
