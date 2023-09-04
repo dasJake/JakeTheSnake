@@ -1,6 +1,7 @@
 import { getNeighborByDirection } from "./fnGetNeighbors.js";
 import { Coord, GameState, Move } from "./types.js";
 import { isCoordSafe } from "./fnIsCoordSafe.js";
+import { debugLog, debugLogStream, writeToLog } from "./fnLogging.js";
 
 export function beamScan (
     gameState: GameState,
@@ -26,9 +27,23 @@ export function perpendicularBeamScan (
 
     const oneDimensionalScan: Coord[] = beamScan(gameState, currentCoord, direction);
 
-    const twoDimensionalScan: Coord[][] = oneDimensionalScan.map(
-        coord => beamScan(gameState, coord, "up"));
+    if (direction === "left" || direction === "right") {
+        const twoDimensionalScan: Coord[][] = oneDimensionalScan.map(
+            coord => [coord,
+                ...beamScan(gameState, coord, "up"),
+                ...beamScan(gameState, coord, "down")]
+            );
+        return twoDimensionalScan;
+    }
+    if (direction === "up" || direction === "down") {
+        const twoDimensionalScan: Coord[][] = oneDimensionalScan.map(
+            coord => [coord,
+                ...beamScan(gameState, coord, "left"),
+                ...beamScan(gameState, coord, "right")]
+            );
+        return twoDimensionalScan;
+    }
 
-    return twoDimensionalScan;
+    return [oneDimensionalScan];
 
 }

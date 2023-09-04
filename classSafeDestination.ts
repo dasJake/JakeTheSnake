@@ -172,11 +172,8 @@ export class SafeDestination {
     direction: Move,
     ): number {
     
-    const scan: Array<Coord> = beamScan(gameState, gameState.you.head, direction);
+    const scan: Coord[][] = perpendicularBeamScan(gameState, gameState.you.head, direction);
     writeToLog(debugLogStream, `${JSON.stringify({scan}, null, 2)}`);
-    
-    const scan2: Coord[][] = perpendicularBeamScan(gameState, gameState.you.head, direction);
-    writeToLog(debugLogStream, `${JSON.stringify({scan2}, null, 2)}`);
     return 0;
     }
 }
