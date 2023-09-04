@@ -17,7 +17,7 @@ import {
 } from "./fnLogging.js";
 import { rateCoords } from "./fnRateCoords.js";
 import { getTurnConfig } from "./config.js";
-import { beamScan } from "./fnBeamScan.js";
+import { beamScan, perpendicularBeamScan } from "./fnBeamScan.js";
 
 export class SafeDestination {
   moveToCoord: Move;
@@ -175,6 +175,8 @@ export class SafeDestination {
     const scan: Array<Coord> = beamScan(gameState, gameState.you.head, direction);
     writeToLog(debugLogStream, `${JSON.stringify({scan}, null, 2)}`);
     
+    const scan2: Coord[][] = perpendicularBeamScan(gameState, gameState.you.head, direction);
+    writeToLog(debugLogStream, `${JSON.stringify({scan2}, null, 2)}`);
     return 0;
     }
 }

@@ -17,3 +17,18 @@ export function beamScan (
     }
     return scan;
 }
+
+export function perpendicularBeamScan (
+    gameState: GameState,
+    currentCoord: Coord,
+    direction: Move,
+    ): Array<Array<Coord>> {
+
+    const oneDimensionalScan: Coord[] = beamScan(gameState, currentCoord, direction);
+
+    const twoDimensionalScan: Coord[][] = oneDimensionalScan.map(
+        coord => beamScan(gameState, coord, "up"));
+
+    return twoDimensionalScan;
+
+}
