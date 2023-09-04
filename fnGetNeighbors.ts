@@ -64,3 +64,34 @@ export function findNeighbors (
     
     return findNeighbors(newNeighors, board, recursionDepth - 1, safe);
   }
+
+export function getNeighborByDirection (
+    anyCoord: Coord,
+    direction: Move,
+    ): Coord {
+    let neighbor: Coord;
+
+    switch(direction) { 
+        case "left": {
+        neighbor = { ...anyCoord, x: anyCoord.x - 1 };
+        break; 
+        } 
+        case "right": {
+        neighbor = { ...anyCoord, x: anyCoord.x + 1 };
+        break; 
+        } 
+        case "up": {
+        neighbor = { ...anyCoord, y: anyCoord.y + 1 };
+        break; 
+        } 
+        case "down": {
+        neighbor = { ...anyCoord, y: anyCoord.y - 1 };
+        break; 
+        } 
+        default: { 
+        neighbor = { ...anyCoord };
+        break; 
+        } 
+    }
+    return neighbor;
+}

@@ -17,6 +17,7 @@ import {
 } from "./fnLogging.js";
 import { rateCoords } from "./fnRateCoords.js";
 import { getTurnConfig } from "./config.js";
+import { beamScan } from "./fnBeamScan.js";
 
 export class SafeDestination {
   moveToCoord: Move;
@@ -28,6 +29,7 @@ export class SafeDestination {
   riskToBeKilled: number;
   foodRadar: number;
   config: Config;
+  passageScore: number;
   //radar: Coord[][];
 
   constructor(
@@ -48,6 +50,7 @@ export class SafeDestination {
     this.chanceToKill = this.determineKillChance(gameState, this.coord);
     this.riskToBeKilled = this.determineRiskToKilled(gameState, this.coord);
     this.foodRadar = this.determineFoodRadar(gameState, this.coord);
+    this.passageScore = this.checkForPassage(gameState, this.moveToCoord);
     this.rating = this.setRating(gameState);
     writeToLog(debugLogStream, `MOVE ${gameState.turn}: rating: ${JSON.stringify(this.rating, null, 2)}`);
   }
@@ -163,6 +166,16 @@ export class SafeDestination {
     writeToLog(debugLogStream, `MOVE ${gameState.turn}: DeathRisk: ${JSON.stringify(riskToBeKilled, null, 2)}`);
   return riskToBeKilled;
   }
-}
 
+  checkForPassage(
+    gameState: GameState,
+    direction: Move,
+    ): number {
+    
+    const scan: Array<Coord> = beamScan(gameState, gameState.you.head, direction);
+    writeToLog(debugLogStream, `${JSON.stringify({scan}, null, 2)}`);
+    
+    return 0;
+    }
+}
 export type SafeDestinations = SafeDestination[];
