@@ -29,7 +29,7 @@ export class SafeDestination {
   riskToBeKilled: number;
   foodRadar: number;
   config: Config;
-  passageScore: number;
+  passageRating: number;
   //radar: Coord[][];
 
   constructor(
@@ -50,7 +50,7 @@ export class SafeDestination {
     this.chanceToKill = this.determineKillChance(gameState, this.coord);
     this.riskToBeKilled = this.determineRiskToKilled(gameState, this.coord);
     this.foodRadar = this.determineFoodRadar(gameState, this.coord);
-    this.passageScore = this.checkForPassage(gameState, this.moveToCoord);
+    this.passageRating = this.checkForPassage(gameState, this.moveToCoord);
     this.rating = this.setRating(gameState);
     writeToLog(debugLogStream, `MOVE ${gameState.turn}: rating: ${JSON.stringify(this.rating, null, 2)}`);
   }
@@ -77,6 +77,10 @@ export class SafeDestination {
 
     writeToLog(debugLogStream, `MOVE ${gameState.turn}: newRatingDeath: ${JSON.stringify(newRating, null, 2)}`);
 
+    newRating += this.passageRating;
+
+    writeToLog(debugLogStream, `MOVE ${gameState.turn}: newRatingPassage: ${JSON.stringify(newRating, null, 2)}`);
+    
     return newRating;
   }
 
@@ -173,7 +177,6 @@ export class SafeDestination {
     ): number {
     
     const scan: Coord[][] = perpendicularBeamScan(gameState, gameState.you.head, direction);
-    writeToLog(debugLogStream, `${JSON.stringify({scan}, null, 2)}`);
     const scanlineWidth: number[] = determinePassageWidth(scan);
     writeToLog(debugLogStream, `${JSON.stringify({scanlineWidth}, null, 2)}`);
     
