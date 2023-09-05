@@ -17,7 +17,7 @@ import {
 } from "./fnLogging.js";
 import { rateCoords } from "./fnRateCoords.js";
 import { getTurnConfig } from "./config.js";
-import { beamScan, perpendicularBeamScan } from "./fnBeamScan.js";
+import { beamScan, determinePassageWidth, perpendicularBeamScan } from "./fnBeamScan.js";
 
 export class SafeDestination {
   moveToCoord: Move;
@@ -174,7 +174,19 @@ export class SafeDestination {
     
     const scan: Coord[][] = perpendicularBeamScan(gameState, gameState.you.head, direction);
     writeToLog(debugLogStream, `${JSON.stringify({scan}, null, 2)}`);
-    return 0;
+    const scanlineWidth: number[] = determinePassageWidth(scan);
+    writeToLog(debugLogStream, `${JSON.stringify({scanlineWidth}, null, 2)}`);
+    
+    let passageRating: number = scanlineWidth.reduce((sum, scanline) => {
+      if (scanline < 4) {
+        return sum + (-20 * (1 / scanline));
+      } else {
+        return sum;
+      }
+    }, 0);
+    writeToLog(debugLogStream, `${JSON.stringify({passageRating}, null, 2)}`);
+  
+    return passageRating;
     }
 }
 export type SafeDestinations = SafeDestination[];

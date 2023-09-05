@@ -45,5 +45,11 @@ export function perpendicularBeamScan (
     }
 
     return [oneDimensionalScan];
+}
 
+export function determinePassageWidth(scan: Array<Array<Coord>>): Array<number> {
+    const scanlineWidth: number[] = scan.map(
+        scanline => scanline.length);
+
+  return scanlineWidth;
 }
