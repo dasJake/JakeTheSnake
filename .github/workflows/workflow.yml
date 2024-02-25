@@ -34,7 +34,7 @@ jobs:
       # copies checkout repo to remote server
       - name: scp
         run: |
-          scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa * "${{ secrets.USER_ON_HOST
+          scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa * "${{ secrets.USER_AT_HOST
           }}":~/JakeTheSnake
 
   log:
@@ -50,5 +50,5 @@ jobs:
 
       - name: write log
         run: |
-          ssh -o StrictHostKeyChecking=no -T -i ~/.ssh/id_rsa "${{ secrets.USER_ON_HOST }}" 'sh -c "
+          ssh -o StrictHostKeyChecking=no -T -i ~/.ssh/id_rsa "${{ secrets.USER_AT_HOST }}" 'sh -c "
           echo \"$(date +'%Y-%m-%d_%T') deployment executed\" >> ~/logs_private/battlesnake_deployment"'
