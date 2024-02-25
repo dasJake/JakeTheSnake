@@ -31,22 +31,20 @@ jobs:
           echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           
-      # copies checkout repo to remote server
-#      - name: replace domain
- #       run: |
-  #        sed -i "s|MYAWESOMEDOMAIN|${{ secrets.DOMAIN }}|g; s|MYAWESOMEPORT|${{ secrets.PORT }}|g" package.json
-
       - name: pass env var to remote host
         run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa "${{ secrets.USER_AT_HOST }}" "echo '
-          export HOST=\"${{ secrets.HOST }}\"
-          export PORT=\"${{ secrets.PORT }}\"
-          ' >> ~/.profile"
+          echo "${{ secrets.HOST }}" > ~/.env/host
+          echo "${{ secrets.PORT }}" > ~/.env/port
+          scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ~/.env/* "${{ secrets.USER_AT_HOST }}":~/JakeTheSnake/env
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa "${{ secrets.USER_AT_HOST }}" "sh -c '
+          export HOST=\"$( ~/JakeTheSnake/env/host )\"
+          export PORT=\"$( ~/JakeTheSnake/env/port )\"
+          '"
 
+      # copies checked out repo to remote server
       - name: scp
         run: |
-          scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa * "${{ secrets.USER_AT_HOST
-          }}":~/JakeTheSnake
+          scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa * "${{ secrets.USER_AT_HOST }}":~/JakeTheSnake
 
   log:
     runs-on: ubuntu-latest
