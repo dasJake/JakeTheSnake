@@ -8,7 +8,7 @@
   "scripts": {
     "build": "tsc",
     "prestart": "npm run build",
-    "start": "node ./.build/index.js --enable-source-maps --host MYAWESOMEDOMAIN --port MYAWESOMEPORT",
+    "start": "node ./.build/index.js --enable-source-maps",
     "format": "npx prettier --write \"**/*.ts\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
