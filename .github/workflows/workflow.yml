@@ -34,8 +34,7 @@ jobs:
       # copies checkout repo to remote server
       - name: replace domain
         run: |
-          sed -i "s|MYAWESOMEDOMAIN|${{ secrets.DOMAIN }}|g" package.json
-          sed -i "s|MYAWESOMEPORT|${{ secrets.PORT }}|g" package.json
+          sed -i "s|MYAWESOMEDOMAIN|${{ secrets.DOMAIN }}|g; s|MYAWESOMEPORT|${{ secrets.PORT }}|g" package.json
 
       - name: scp
         run: |
