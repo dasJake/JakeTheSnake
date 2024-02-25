@@ -41,7 +41,7 @@ jobs:
           ssh -o StrictHostKeyChecking=no -T -i ~/.ssh/id_rsa "${{ secrets.USER_AT_HOST }}" "sh -c \'
           export HOST="${{ secrets.DOMAIN }}"
           export PORT="$(( secrets.PORT}}"
-          \''
+          \'"
 
       - name: scp
         run: |
