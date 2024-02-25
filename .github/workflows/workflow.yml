@@ -38,8 +38,8 @@ jobs:
           echo "${{ secrets.PORT }}" > ~/.env/port
           scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ~/.env/* "${{ secrets.USER_AT_HOST }}":~/JakeTheSnake/env
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa "${{ secrets.USER_AT_HOST }}" "sh -c '
-          export HOST=\"$( ~/JakeTheSnake/env/host )\"
-          export PORT=\"$( ~/JakeTheSnake/env/port )\"
+          export HOST=\"$( cat ~/JakeTheSnake/env/host )\"
+          export PORT=\"$( cat ~/JakeTheSnake/env/port )\"
           '"
 
       # copies checked out repo to remote server
