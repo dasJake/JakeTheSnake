@@ -33,6 +33,7 @@ jobs:
           
       - name: pass env var to remote host
         run: |
+          mkdir -p ~/.env
           echo "${{ secrets.HOST }}" > ~/.env/host
           echo "${{ secrets.PORT }}" > ~/.env/port
           scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ~/.env/* "${{ secrets.USER_AT_HOST }}":~/JakeTheSnake/env
