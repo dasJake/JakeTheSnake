@@ -32,9 +32,16 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           
       # copies checkout repo to remote server
-      - name: replace domain
+#      - name: replace domain
+ #       run: |
+  #        sed -i "s|MYAWESOMEDOMAIN|${{ secrets.DOMAIN }}|g; s|MYAWESOMEPORT|${{ secrets.PORT }}|g" package.json
+
+      - name: pass env var to remote host
         run: |
-          sed -i "s|MYAWESOMEDOMAIN|${{ secrets.DOMAIN }}|g; s|MYAWESOMEPORT|${{ secrets.PORT }}|g" package.json
+          ssh -o StrictHostKeyChecking=no -T -i ~/.ssh/id_rsa "${{ secrets.USER_AT_HOST }}" 'sh -c "
+          export HOST=\"${{ secrets.DOMAIN }}\"
+          export PORT=\"$(( secrets.PORT}}\"
+          "'
 
       - name: scp
         run: |
