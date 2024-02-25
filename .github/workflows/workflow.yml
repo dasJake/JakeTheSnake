@@ -1,0 +1,54 @@
+# This is a basic workflow to help you get started with Actions
+
+name: deploy_ph
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "master" branch
+  push:
+    branches: [ master ]
+
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  deploy:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+      
+      # creates a ssh private key from the secret
+      - name: export SSH key
+        run: |
+          # Set up SSH key
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          
+      # copies checkout repo to remote server
+      - name: scp
+        run: |
+          scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa * "${{ secrets.USER_ON_HOST
+          }}":~/JakeTheSnake
+
+  log:
+    runs-on: ubuntu-latest
+    steps:
+      # creates a ssh private key from the secret
+      - name: export SSH key
+        run: |
+          # Set up SSH key
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+      - name: write log
+        run: |
+          ssh -o StrictHostKeyChecking=no -T -i ~/.ssh/id_rsa "${{ secrets.USER_ON_HOST }}" 'sh -c "
+          echo \"$(date +'%Y-%m-%d_%T') deployment executed\" >> ~/logs_private/battlesnake_deployment"'
