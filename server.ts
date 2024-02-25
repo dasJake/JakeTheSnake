@@ -34,7 +34,7 @@ export default function runServer(handlers: BattlesnakeHandlers) {
     next();
   });
 
-  const host = "0.0.0.0";
+  const host = process.env.HOST || "0.0.0.0";
   const port = parseInt(process.env.PORT || "8000");
 
   app.listen(port, host, () => {
