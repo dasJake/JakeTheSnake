@@ -38,10 +38,10 @@ jobs:
 
       - name: pass env var to remote host
         run: |
-          ssh -o StrictHostKeyChecking=no -T -i ~/.ssh/id_rsa "${{ secrets.USER_AT_HOST }}" "sh -c '
-          export HOST=\"${{ secrets.DOMAIN }}\"
-          export PORT=\"$(( secrets.PORT}}\"
-          '"
+          ssh -o StrictHostKeyChecking=no -T -i ~/.ssh/id_rsa "${{ secrets.USER_AT_HOST }}" "sh -c \'
+          export HOST="${{ secrets.DOMAIN }}"
+          export PORT="$(( secrets.PORT}}"
+          \''
 
       - name: scp
         run: |
